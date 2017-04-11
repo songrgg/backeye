@@ -1,0 +1,7 @@
+bind: ":9876"
+
+schedules:
+  address: "127.0.0.1"
+
+log:
+  level: 5
