@@ -19,18 +19,18 @@
 		},
 		{
 			"ImportPath": "github.com/labstack/echo",
-			"Comment": "v3.0.3-14-gfb7825e",
-			"Rev": "fb7825eb999f001b418cbd3581d04f7009d0466e"
+			"Comment": "v3.1.0-rc.1-34-g9cd74c5",
+			"Rev": "9cd74c54c1619a4e77353118937b5055c1c5b5a7"
 		},
 		{
 			"ImportPath": "github.com/labstack/gommon/color",
-			"Comment": "v0.1.0-2-g447fe74",
-			"Rev": "447fe7433567c785af957e549aadae2bf2000071"
+			"Comment": "v0.1.0-18-g9298d71",
+			"Rev": "9298d710c664bcd21c454120f63a00fb7d484458"
 		},
 		{
 			"ImportPath": "github.com/labstack/gommon/log",
-			"Comment": "v0.1.0-2-g447fe74",
-			"Rev": "447fe7433567c785af957e549aadae2bf2000071"
+			"Comment": "v0.1.0-18-g9298d71",
+			"Rev": "9298d710c664bcd21c454120f63a00fb7d484458"
 		},
 		{
 			"ImportPath": "github.com/mattn/go-colorable",
@@ -45,11 +45,6 @@
 			"ImportPath": "github.com/robfig/cron",
 			"Comment": "v1-53-gdf38d32",
 			"Rev": "df38d32658d8788cd446ba74db4bb5375c4b0cb3"
-		},
-		{
-			"ImportPath": "github.com/tylerb/graceful",
-			"Comment": "v1.2.13-2-g4df1190",
-			"Rev": "4df1190835320af7076dfcf27b3d071fd3612caf"
 		},
 		{
 			"ImportPath": "github.com/valyala/fasttemplate",
