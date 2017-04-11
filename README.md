@@ -1,5 +1,7 @@
 Backeye
 ========
+[![Build Status](https://travis-ci.org/songrgg/backeye.png?branch=master)](https://travis-ci.org/songrgg/backeye)
+
 Another API accuracy monitor tool.
 
 Try to fetch & check HTTP API & RPC cronly.
