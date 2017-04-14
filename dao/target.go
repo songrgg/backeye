@@ -44,7 +44,7 @@ func UpdateTarget(target *model.Target) error {
 	return targetCollection.Update(bson.M{"name": target.Name}, target)
 }
 
-func All() ([]model.Target, error) {
+func AllTargets() ([]model.Target, error) {
 	cnt, err := targetCollection.Count()
 	if err != nil {
 		return nil, err

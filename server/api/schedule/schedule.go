@@ -9,7 +9,7 @@ import (
 	"github.com/songrgg/backeye/model"
 )
 
-func HTTPAddSchedule(ctx echo.Context) error {
+func HTTPAddTask(ctx echo.Context) error {
 	args := &model.Target{}
 	if err := ctx.Bind(args); err != nil {
 		return helper.ErrorResponse(ctx, errors.New("fail to bind args"))
@@ -18,31 +18,42 @@ func HTTPAddSchedule(ctx echo.Context) error {
 	return nil
 }
 
-func HTTPGetSchedules(ctx echo.Context) error {
-	target := listSchedules(ctx)
+func HTTPGetTasks(ctx echo.Context) error {
+	target := listTasks(ctx)
 	return helper.SuccessResponse(ctx, target)
 }
 
-func HTTPGetSchedule(ctx echo.Context) error {
+func HTTPGetTask(ctx echo.Context) error {
 	id := ctx.Param("id")
 	if id == "" {
 		return ctx.JSON(200, helper.Payload(nil))
 	}
-	target := getSchedule(ctx, id)
+	target := getTask(ctx, id)
 	return helper.SuccessResponse(ctx, target)
 }
 
-func HTTPDeleteSchedule(ctx echo.Context) error {
+func HTTPDeleteTask(ctx echo.Context) error {
 	id := ctx.Param("id")
 	dao.RemoveTarget(id)
 	return helper.SuccessResponse(ctx, helper.Payload(nil))
 }
 
-func HTTPUpdateSchedule(ctx echo.Context) error {
+func HTTPUpdateTask(ctx echo.Context) error {
 	return nil
 }
 
-func listSchedules(ctx echo.Context) *model.Target {
+func HTTPGetWatchResults(ctx echo.Context) error {
+	id := ctx.Param("id")
+	watchResults := getWatchResults(ctx, id, "")
+	return helper.SuccessResponse(ctx, watchResults)
+}
+
+func HTTPGetTaskHealth(ctx echo.Context) error {
+	id := ctx.Param("id")
+	return helper.SuccessResponse(ctx, getTaskHealth(ctx, id))
+}
+
+func listTasks(ctx echo.Context) *model.Target {
 	target, err := dao.GetTarget("Post API")
 	if err != nil {
 		return nil
@@ -50,10 +61,40 @@ func listSchedules(ctx echo.Context) *model.Target {
 	return target
 }
 
-func getSchedule(ctx echo.Context, id string) *model.Target {
+func getTask(ctx echo.Context, id string) *model.Target {
 	target, err := dao.GetTarget(id)
 	if err != nil {
 		return nil
 	}
 	return target
+}
+
+func getWatchResults(ctx echo.Context, taskName string, watchName string) []model.WatchResult {
+	results, err := dao.AllWatchResults(taskName)
+	if err != nil {
+		return nil
+	}
+	return results
+}
+
+func getTaskHealth(ctx echo.Context, taskName string) *model.TaskHealth {
+	results, err := dao.AllWatchResults(taskName)
+	if err != nil {
+		return nil
+	}
+
+	total := 0
+	success := 0
+	for _, result := range results {
+		for _, assertion := range result.Assertions {
+			if assertion.Success {
+				success++
+			}
+			total++
+		}
+	}
+	return &model.TaskHealth{
+		Total:   total,
+		Success: success,
+	}
 }

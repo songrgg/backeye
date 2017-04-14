@@ -6,11 +6,11 @@ import (
 	"fmt"
 
 	"github.com/robfig/cron"
-	"github.com/songrgg/backeye/hook"
 	"github.com/songrgg/backeye/model"
 	"github.com/songrgg/backeye/parser/json"
 	"github.com/songrgg/backeye/std"
 	"github.com/songrgg/backeye/target"
+	"github.com/songrgg/backeye/watch"
 )
 
 type status int
@@ -24,8 +24,8 @@ const (
 
 // Scheduler defines the api test's schedule rule
 type Scheduler struct {
-	schedules map[string]*Schedule
-	hooks     []*hook.Hook
+	schedules    map[string]*Schedule
+	WatchResults chan watch.WatchResult
 }
 
 // Schedule includes a schedule target and cronjob
@@ -61,14 +61,10 @@ func (sch *Scheduler) LoadTargets(targets []model.Target) error {
 	return nil
 }
 
-func (sch *Scheduler) AddHook(h *hook.Hook) {
-	sch.hooks = append(sch.hooks, h)
-}
-
 func newScheduler() *Scheduler {
 	return &Scheduler{
-		schedules: make(map[string]*Schedule),
-		hooks:     make([]*hook.Hook, 0),
+		schedules:    make(map[string]*Schedule),
+		WatchResults: make(chan watch.WatchResult, 1000),
 	}
 }
 
@@ -81,7 +77,7 @@ func (sch *Scheduler) Create(t *target.Target) error {
 
 	sch.schedules[t.Name] = &Schedule{
 		target: t,
-		cron:   parseCron(t),
+		cron:   parseCron(t, sch.WatchResults),
 		status: STOPPED,
 	}
 	std.LogInfoc("mongo", fmt.Sprintf("schedule %s added", t.Name))
@@ -131,7 +127,7 @@ func (sch *Scheduler) getSchedule(name string) (*Schedule, error) {
 	return nil, errors.New("schedule not found")
 }
 
-func parseCron(t *target.Target) *cron.Cron {
+func parseCron(t *target.Target, wr chan watch.WatchResult) *cron.Cron {
 	c := cron.New()
 	c.AddFunc(t.CronSpec, func() {
 		results, err := t.Run(context.Background())
@@ -141,7 +137,12 @@ func parseCron(t *target.Target) *cron.Cron {
 		}
 
 		for _, result := range results {
-			fmt.Println("result: ", result.Assertions)
+			select {
+			case wr <- result:
+			default:
+				std.LogErrorc("watch_result", nil, "watch result channel is full")
+				continue
+			}
 		}
 	})
 	return c

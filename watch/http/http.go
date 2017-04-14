@@ -45,16 +45,21 @@ type Watch struct {
 
 // Run executes this watch
 func (w *Watch) Run(ctx context.Context) (watch.WatchResult, error) {
+	result := watch.WatchResult{
+		TaskName:      ctx.Value("task").(string),
+		WatchName:     w.Name,
+		ExecutionTime: time.Now(),
+	}
 	switch w.Method {
 	case GET:
 		resp, err := nethttp.Get(w.Path)
 		if err != nil {
-			return watch.WatchResult{}, err
+			return result, err
 		}
 
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			return watch.WatchResult{}, err
+			return result, err
 		}
 
 		ctx = context.WithValue(ctx, watch.ResponseBody, body)
@@ -66,15 +71,14 @@ func (w *Watch) Run(ctx context.Context) (watch.WatchResult, error) {
 				break
 			}
 		}
-		return watch.WatchResult{
-			Response:   resp,
-			Assertions: assertionResults,
-		}, nil
+		result.Response = resp
+		result.Assertions = assertionResults
+		return result, nil
 
 	case POST:
 	case PUT:
-		return watch.WatchResult{}, nil
+		return result, nil
 	}
 
-	return watch.WatchResult{}, errors.New("unsupported HTTP method")
+	return result, errors.New("unsupported HTTP method")
 }

@@ -17,12 +17,13 @@ type Target struct {
 // Run executes the watches in order
 func (t *Target) Run(ctx context.Context) ([]watch.WatchResult, error) {
 	watchResults := make([]watch.WatchResult, 0)
+	ctx = context.WithValue(ctx, "task", t.Name)
 	for _, watch := range t.Watches {
 		watchResult, err := watch.Run(ctx)
-		watchResults = append(watchResults, watchResult)
 		if err != nil {
 			return watchResults, err
 		}
+		watchResults = append(watchResults, watchResult)
 	}
 	return watchResults, nil
 }

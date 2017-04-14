@@ -6,9 +6,15 @@ import (
 
 // MountAPI registers API
 func MountAPI(group *echo.Group) {
-	schedule := group.Group("/schedules")
-	schedule.POST("/", HTTPAddSchedule)
-	schedule.GET("/test", HTTPGetSchedules)
-	schedule.DELETE("/", HTTPDeleteSchedule)
-	schedule.PUT("/", HTTPUpdateSchedule)
+	mountTaskAPI(group)
+}
+
+func mountTaskAPI(group *echo.Group) {
+	task := group.Group("/tasks")
+	task.POST("/", HTTPAddTask)
+	task.GET("/", HTTPGetTasks)
+	task.DELETE("/", HTTPDeleteTask)
+	task.PUT("/", HTTPUpdateTask)
+	task.GET("/:id/watch_results", HTTPGetWatchResults)
+	task.GET("/:id/health", HTTPGetTaskHealth)
 }

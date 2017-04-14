@@ -3,6 +3,7 @@ package watch
 import (
 	"context"
 	nethttp "net/http"
+	"time"
 
 	"github.com/songrgg/backeye/assertion"
 )
@@ -20,6 +21,9 @@ type Watch interface {
 
 // WatchResult indicates the watch's result
 type WatchResult struct {
+	TaskName      string
+	WatchName     string
+	ExecutionTime time.Time
 	ExtractValues map[string]string
 	Response      *nethttp.Response
 	Assertions    []assertion.AssertionResult

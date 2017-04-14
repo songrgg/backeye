@@ -8,9 +8,10 @@ import (
 )
 
 var (
-	session          *mgo.Session
-	db               *mgo.Database
-	targetCollection *mgo.Collection
+	session               *mgo.Session
+	db                    *mgo.Database
+	targetCollection      *mgo.Collection
+	watchResultCollection *mgo.Collection
 )
 
 func InitMongo() {
@@ -20,6 +21,7 @@ func InitMongo() {
 	}
 	db = session.DB("schedule")
 	targetCollection = db.C("target")
+	watchResultCollection = db.C("watch_result")
 }
 
 func NewMongoSession(address string) (*mgo.Session, error) {

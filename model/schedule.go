@@ -28,8 +28,22 @@ type Assertion struct {
 	Right    string `json:"right"`
 }
 
+// AssertionResult indicates the assertion result
 type AssertionResult struct {
-	AssertionID int64
-	Success     bool
-	Message     string
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+// WatchResult indicates the watch's result
+type WatchResult struct {
+	TaskName      string            `json:"task_name"`
+	WatchName     string            `json:"watch_name"`
+	ExecutionTime int64             `json:"execution_time"`
+	Assertions    []AssertionResult `json:"assertion_results"`
+}
+
+// TaskHealth indicates the task's health condition
+type TaskHealth struct {
+	Total   int `json:"total"`
+	Success int `json:"success"`
 }
