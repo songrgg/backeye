@@ -1,6 +1,6 @@
 package model
 
-type Target struct {
+type Task struct {
 	Name     string  `json:"name"`
 	Desc     string  `json:"desc"`
 	CronSpec string  `json:"cron"`

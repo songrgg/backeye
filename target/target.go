@@ -6,8 +6,8 @@ import (
 	"github.com/songrgg/backeye/watch"
 )
 
-// Target wraps the whole API target test
-type Target struct {
+// Task wraps the whole API target test
+type Task struct {
 	Name     string
 	Desc     string
 	CronSpec string
@@ -15,7 +15,7 @@ type Target struct {
 }
 
 // Run executes the watches in order
-func (t *Target) Run(ctx context.Context) ([]watch.WatchResult, error) {
+func (t *Task) Run(ctx context.Context) ([]watch.WatchResult, error) {
 	watchResults := make([]watch.WatchResult, 0)
 	ctx = context.WithValue(ctx, "task", t.Name)
 	for _, watch := range t.Watches {

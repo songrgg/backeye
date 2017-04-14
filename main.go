@@ -21,11 +21,11 @@ func main() {
 func initSchedule() {
 	dao.InitMongo()
 
-	all, err := dao.AllTargets()
+	all, err := dao.AllTasks()
 	if err != nil {
 		panic(err)
 	}
-	schedule.INSTANCE.LoadTargets(all)
+	schedule.INSTANCE.LoadTasks(all)
 }
 
 func watchResults() {

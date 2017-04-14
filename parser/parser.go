@@ -8,7 +8,7 @@ import (
 // Parser translates the source to the api test target
 type Parser interface {
 	// Translate execute the input
-	Translate(data []byte) (*target.Target, error)
+	Translate(data []byte) (*target.Task, error)
 }
 
 const (

@@ -30,7 +30,7 @@ type Scheduler struct {
 
 // Schedule includes a schedule target and cronjob
 type Schedule struct {
-	target *target.Target
+	target *target.Task
 	status status
 	cron   *cron.Cron
 }
@@ -40,8 +40,8 @@ var (
 	INSTANCE = newScheduler()
 )
 
-// LoadTargets loads target
-func (sch *Scheduler) LoadTargets(targets []model.Target) error {
+// LoadTasks loads target
+func (sch *Scheduler) LoadTasks(targets []model.Task) error {
 	parser := json.Parser{}
 	for _, target := range targets {
 		t2, err := parser.TranslateModel(&target)
@@ -69,7 +69,7 @@ func newScheduler() *Scheduler {
 }
 
 // Create a schedule
-func (sch *Scheduler) Create(t *target.Target) error {
+func (sch *Scheduler) Create(t *target.Task) error {
 	if _, err := sch.getSchedule(t.Name); err == nil {
 		std.LogErrorc("mongo", nil, "schedule already exists")
 		return nil
@@ -127,7 +127,7 @@ func (sch *Scheduler) getSchedule(name string) (*Schedule, error) {
 	return nil, errors.New("schedule not found")
 }
 
-func parseCron(t *target.Target, wr chan watch.WatchResult) *cron.Cron {
+func parseCron(t *target.Task, wr chan watch.WatchResult) *cron.Cron {
 	c := cron.New()
 	c.AddFunc(t.CronSpec, func() {
 		results, err := t.Run(context.Background())

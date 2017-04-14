@@ -7,7 +7,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func NewTarget(target *model.Target) error {
+func NewTask(target *model.Task) error {
 	index := mgo.Index{
 		Key:        []string{"name"},
 		Unique:     true,
@@ -30,34 +30,34 @@ func NewTarget(target *model.Target) error {
 	return nil
 }
 
-func GetTarget(name string) (*model.Target, error) {
-	target := model.Target{}
+func GetTask(name string) (*model.Task, error) {
+	target := model.Task{}
 	err := targetCollection.Find(bson.M{"name": name}).One(&target)
 	return &target, err
 }
 
-func RemoveTarget(name string) error {
+func RemoveTask(name string) error {
 	return targetCollection.Remove(bson.M{"name": name})
 }
 
-func UpdateTarget(target *model.Target) error {
+func UpdateTask(target *model.Task) error {
 	return targetCollection.Update(bson.M{"name": target.Name}, target)
 }
 
-func AllTargets() ([]model.Target, error) {
+func AllTasks() ([]model.Task, error) {
 	cnt, err := targetCollection.Count()
 	if err != nil {
 		return nil, err
 	}
 
-	allTargets := make([]model.Target, cnt)
+	allTasks := make([]model.Task, cnt)
 	iter := targetCollection.Find(nil).Limit(1000).Iter()
-	if err := iter.All(&allTargets); err != nil {
+	if err := iter.All(&allTasks); err != nil {
 		return nil, err
 	}
-	return allTargets, nil
+	return allTasks, nil
 }
 
-func ListTarget(page int, limit int) ([]*model.Target, error) {
+func ListTask(page int, limit int) ([]*model.Task, error) {
 	return nil, nil
 }

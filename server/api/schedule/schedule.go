@@ -10,7 +10,7 @@ import (
 )
 
 func HTTPAddTask(ctx echo.Context) error {
-	args := &model.Target{}
+	args := &model.Task{}
 	if err := ctx.Bind(args); err != nil {
 		return helper.ErrorResponse(ctx, errors.New("fail to bind args"))
 	}
@@ -34,7 +34,7 @@ func HTTPGetTask(ctx echo.Context) error {
 
 func HTTPDeleteTask(ctx echo.Context) error {
 	id := ctx.Param("id")
-	dao.RemoveTarget(id)
+	dao.RemoveTask(id)
 	return helper.SuccessResponse(ctx, helper.Payload(nil))
 }
 
@@ -53,16 +53,16 @@ func HTTPGetTaskHealth(ctx echo.Context) error {
 	return helper.SuccessResponse(ctx, getTaskHealth(ctx, id))
 }
 
-func listTasks(ctx echo.Context) *model.Target {
-	target, err := dao.GetTarget("Post API")
+func listTasks(ctx echo.Context) *model.Task {
+	target, err := dao.GetTask("Post API")
 	if err != nil {
 		return nil
 	}
 	return target
 }
 
-func getTask(ctx echo.Context, id string) *model.Target {
-	target, err := dao.GetTarget(id)
+func getTask(ctx echo.Context, id string) *model.Task {
+	target, err := dao.GetTask(id)
 	if err != nil {
 		return nil
 	}

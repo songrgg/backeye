@@ -17,11 +17,11 @@ import (
 )
 
 type Parser struct {
-	Target *Target
+	Task *Task
 }
 
-// Target defines the JSON
-type Target struct {
+// Task defines the JSON
+type Task struct {
 	Name    string  `json:"name"`
 	Desc    string  `json:"desc"`
 	Cron    string  `json:"cron"`
@@ -53,18 +53,18 @@ type Assertion struct {
 }
 
 func (p *Parser) load(data []byte) error {
-	target := Target{}
+	target := Task{}
 	err := json.Unmarshal(data, &target)
 	if err != nil {
 		log.Println("json Unmarshal error: ", err)
 		return err
 	}
-	p.Target = &target
+	p.Task = &target
 	return nil
 }
 
 // TranslateModel translates model to target
-func (p *Parser) TranslateModel(t *model.Target) (*target.Target, error) {
+func (p *Parser) TranslateModel(t *model.Task) (*target.Task, error) {
 	bytes, err := json.Marshal(t)
 	if err != nil {
 		return nil, err
@@ -73,20 +73,20 @@ func (p *Parser) TranslateModel(t *model.Target) (*target.Target, error) {
 }
 
 // Translate translates JSON to target
-func (p *Parser) Translate(data []byte) (*target.Target, error) {
+func (p *Parser) Translate(data []byte) (*target.Task, error) {
 	if err := p.load(data); err != nil {
 		return nil, err
 	}
 
-	target := target.Target{}
-	if p.Target != nil {
-		target.Name = p.Target.Name
-		target.Desc = p.Target.Desc
-		target.CronSpec = p.Target.Cron
+	target := target.Task{}
+	if p.Task != nil {
+		target.Name = p.Task.Name
+		target.Desc = p.Task.Desc
+		target.CronSpec = p.Task.Cron
 	}
 
 	target.Watches = make([]watch.Watch, 0)
-	for _, watch := range p.Target.Watches {
+	for _, watch := range p.Task.Watches {
 		target.Watches = append(target.Watches, parseWatch(&watch))
 	}
 	return &target, nil
