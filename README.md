@@ -1,6 +1,7 @@
 Backeye
 ========
 [![Build Status](https://travis-ci.org/songrgg/backeye.png?branch=master)](https://travis-ci.org/songrgg/backeye)
+[![Go Report Card](https://goreportcard.com/badge/github.com/songrgg/backeye)](https://goreportcard.com/report/github.com/songrgg/backeye)
 
 Another API accuracy monitor tool.
 
