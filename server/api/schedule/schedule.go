@@ -19,8 +19,8 @@ func HTTPAddTask(ctx echo.Context) error {
 }
 
 func HTTPGetTasks(ctx echo.Context) error {
-	target := listTasks(ctx)
-	return helper.SuccessResponse(ctx, target)
+	task := listTasks(ctx)
+	return helper.SuccessResponse(ctx, task)
 }
 
 func HTTPGetTask(ctx echo.Context) error {
@@ -28,8 +28,8 @@ func HTTPGetTask(ctx echo.Context) error {
 	if id == "" {
 		return ctx.JSON(200, helper.Payload(nil))
 	}
-	target := getTask(ctx, id)
-	return helper.SuccessResponse(ctx, target)
+	task := getTask(ctx, id)
+	return helper.SuccessResponse(ctx, task)
 }
 
 func HTTPDeleteTask(ctx echo.Context) error {
@@ -54,19 +54,19 @@ func HTTPGetTaskHealth(ctx echo.Context) error {
 }
 
 func listTasks(ctx echo.Context) *model.Task {
-	target, err := dao.GetTask("Post API")
+	task, err := dao.GetTask("Post API")
 	if err != nil {
 		return nil
 	}
-	return target
+	return task
 }
 
 func getTask(ctx echo.Context, id string) *model.Task {
-	target, err := dao.GetTask(id)
+	task, err := dao.GetTask(id)
 	if err != nil {
 		return nil
 	}
-	return target
+	return task
 }
 
 func getWatchResults(ctx echo.Context, taskName string, watchName string) []model.WatchResult {

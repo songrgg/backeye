@@ -11,7 +11,7 @@ import (
 
 	"github.com/songrgg/backeye/assertion"
 	"github.com/songrgg/backeye/model"
-	"github.com/songrgg/backeye/target"
+	"github.com/songrgg/backeye/task"
 	"github.com/songrgg/backeye/watch"
 	"github.com/songrgg/backeye/watch/http"
 )
@@ -53,18 +53,18 @@ type Assertion struct {
 }
 
 func (p *Parser) load(data []byte) error {
-	target := Task{}
-	err := json.Unmarshal(data, &target)
+	task := Task{}
+	err := json.Unmarshal(data, &task)
 	if err != nil {
 		log.Println("json Unmarshal error: ", err)
 		return err
 	}
-	p.Task = &target
+	p.Task = &task
 	return nil
 }
 
-// TranslateModel translates model to target
-func (p *Parser) TranslateModel(t *model.Task) (*target.Task, error) {
+// TranslateModel translates model to task
+func (p *Parser) TranslateModel(t *model.Task) (*task.Task, error) {
 	bytes, err := json.Marshal(t)
 	if err != nil {
 		return nil, err
@@ -72,24 +72,24 @@ func (p *Parser) TranslateModel(t *model.Task) (*target.Task, error) {
 	return p.Translate(bytes)
 }
 
-// Translate translates JSON to target
-func (p *Parser) Translate(data []byte) (*target.Task, error) {
+// Translate translates JSON to task
+func (p *Parser) Translate(data []byte) (*task.Task, error) {
 	if err := p.load(data); err != nil {
 		return nil, err
 	}
 
-	target := target.Task{}
+	task := task.Task{}
 	if p.Task != nil {
-		target.Name = p.Task.Name
-		target.Desc = p.Task.Desc
-		target.CronSpec = p.Task.Cron
+		task.Name = p.Task.Name
+		task.Desc = p.Task.Desc
+		task.CronSpec = p.Task.Cron
 	}
 
-	target.Watches = make([]watch.Watch, 0)
+	task.Watches = make([]watch.Watch, 0)
 	for _, watch := range p.Task.Watches {
-		target.Watches = append(target.Watches, parseWatch(&watch))
+		task.Watches = append(task.Watches, parseWatch(&watch))
 	}
-	return &target, nil
+	return &task, nil
 }
 
 func parseWatch(w *Watch) watch.Watch {

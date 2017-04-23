@@ -9,7 +9,7 @@ import (
 	"github.com/songrgg/backeye/model"
 	"github.com/songrgg/backeye/parser/json"
 	"github.com/songrgg/backeye/std"
-	"github.com/songrgg/backeye/target"
+	"github.com/songrgg/backeye/task"
 	"github.com/songrgg/backeye/watch"
 )
 
@@ -28,9 +28,9 @@ type Scheduler struct {
 	WatchResults chan watch.WatchResult
 }
 
-// Schedule includes a schedule target and cronjob
+// Schedule includes a schedule task and cronjob
 type Schedule struct {
-	target *target.Task
+	task   *task.Task
 	status status
 	cron   *cron.Cron
 }
@@ -40,21 +40,21 @@ var (
 	INSTANCE = newScheduler()
 )
 
-// LoadTasks loads target
-func (sch *Scheduler) LoadTasks(targets []model.Task) error {
+// LoadTasks loads task
+func (sch *Scheduler) LoadTasks(tasks []model.Task) error {
 	parser := json.Parser{}
-	for _, target := range targets {
-		t2, err := parser.TranslateModel(&target)
+	for _, task := range tasks {
+		t2, err := parser.TranslateModel(&task)
 		if err != nil {
-			std.LogErrorc("scheduler", err, fmt.Sprintf("fail to parse target %s", target.Name))
+			std.LogErrorc("scheduler", err, fmt.Sprintf("fail to parse task %s", task.Name))
 			continue
 		}
 		if err := sch.Create(t2); err != nil {
-			std.LogErrorc("scheduler", err, fmt.Sprintf("fail to create target %s", t2.Name))
+			std.LogErrorc("scheduler", err, fmt.Sprintf("fail to create task %s", t2.Name))
 			continue
 		}
 		if err := sch.Start(t2.Name); err != nil {
-			std.LogErrorc("scheduler", err, fmt.Sprintf("fail to start target %s", t2.Name))
+			std.LogErrorc("scheduler", err, fmt.Sprintf("fail to start task %s", t2.Name))
 			continue
 		}
 	}
@@ -69,14 +69,14 @@ func newScheduler() *Scheduler {
 }
 
 // Create a schedule
-func (sch *Scheduler) Create(t *target.Task) error {
+func (sch *Scheduler) Create(t *task.Task) error {
 	if _, err := sch.getSchedule(t.Name); err == nil {
 		std.LogErrorc("mongo", nil, "schedule already exists")
 		return nil
 	}
 
 	sch.schedules[t.Name] = &Schedule{
-		target: t,
+		task:   t,
 		cron:   parseCron(t, sch.WatchResults),
 		status: STOPPED,
 	}
@@ -127,7 +127,7 @@ func (sch *Scheduler) getSchedule(name string) (*Schedule, error) {
 	return nil, errors.New("schedule not found")
 }
 
-func parseCron(t *target.Task, wr chan watch.WatchResult) *cron.Cron {
+func parseCron(t *task.Task, wr chan watch.WatchResult) *cron.Cron {
 	c := cron.New()
 	c.AddFunc(t.CronSpec, func() {
 		results, err := t.Run(context.Background())

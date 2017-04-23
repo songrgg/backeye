@@ -1,4 +1,4 @@
-package target
+package task
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"github.com/songrgg/backeye/watch"
 )
 
-// Task wraps the whole API target test
+// Task wraps the whole API task test
 type Task struct {
 	Name     string
 	Desc     string

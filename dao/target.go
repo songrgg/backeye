@@ -7,7 +7,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func NewTask(target *model.Task) error {
+func NewTask(task *model.Task) error {
 	index := mgo.Index{
 		Key:        []string{"name"},
 		Unique:     true,
@@ -15,12 +15,12 @@ func NewTask(target *model.Task) error {
 		Background: true, // See notes.
 		Sparse:     true,
 	}
-	err := targetCollection.EnsureIndex(index)
+	err := taskCollection.EnsureIndex(index)
 	if err != nil && !mgo.IsDup(err) {
 		return err
 	}
 
-	err = targetCollection.Insert(target)
+	err = taskCollection.Insert(task)
 	if err != nil {
 		if mgo.IsDup(err) {
 			return nil
@@ -31,27 +31,27 @@ func NewTask(target *model.Task) error {
 }
 
 func GetTask(name string) (*model.Task, error) {
-	target := model.Task{}
-	err := targetCollection.Find(bson.M{"name": name}).One(&target)
-	return &target, err
+	task := model.Task{}
+	err := taskCollection.Find(bson.M{"name": name}).One(&task)
+	return &task, err
 }
 
 func RemoveTask(name string) error {
-	return targetCollection.Remove(bson.M{"name": name})
+	return taskCollection.Remove(bson.M{"name": name})
 }
 
-func UpdateTask(target *model.Task) error {
-	return targetCollection.Update(bson.M{"name": target.Name}, target)
+func UpdateTask(task *model.Task) error {
+	return taskCollection.Update(bson.M{"name": task.Name}, task)
 }
 
 func AllTasks() ([]model.Task, error) {
-	cnt, err := targetCollection.Count()
+	cnt, err := taskCollection.Count()
 	if err != nil {
 		return nil, err
 	}
 
 	allTasks := make([]model.Task, cnt)
-	iter := targetCollection.Find(nil).Limit(1000).Iter()
+	iter := taskCollection.Find(nil).Limit(1000).Iter()
 	if err := iter.All(&allTasks); err != nil {
 		return nil, err
 	}

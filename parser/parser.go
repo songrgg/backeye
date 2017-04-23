@@ -2,22 +2,22 @@ package parser
 
 import (
 	"github.com/songrgg/backeye/parser/json"
-	"github.com/songrgg/backeye/target"
+	"github.com/songrgg/backeye/task"
 )
 
-// Parser translates the source to the api test target
+// Parser translates the source to the api test task
 type Parser interface {
 	// Translate execute the input
-	Translate(data []byte) (*target.Task, error)
+	Translate(data []byte) (*task.Task, error)
 }
 
 const (
 	JSON string = "json"
 )
 
-// NewParser creates a new parser according to the target type
-func NewParser(targetType string, input string) Parser {
-	switch targetType {
+// NewParser creates a new parser according to the task type
+func NewParser(taskType string, input string) Parser {
+	switch taskType {
 	case JSON:
 		return &json.Parser{}
 	}

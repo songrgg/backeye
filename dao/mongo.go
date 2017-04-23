@@ -10,7 +10,7 @@ import (
 var (
 	session               *mgo.Session
 	db                    *mgo.Database
-	targetCollection      *mgo.Collection
+	taskCollection        *mgo.Collection
 	watchResultCollection *mgo.Collection
 )
 
@@ -20,7 +20,7 @@ func InitMongo() {
 		panic(fmt.Sprintf("fail to start mongo: %v", err))
 	}
 	db = session.DB("schedule")
-	targetCollection = db.C("target")
+	taskCollection = db.C("task")
 	watchResultCollection = db.C("watch_result")
 }
 

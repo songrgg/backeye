@@ -37,9 +37,9 @@ func TestTranslate(t *testing.T) {
 	assert.NoError(t, err)
 
 	jsonParser.load(bytes)
-	target := jsonParser.Task
-	assert.Equal(t, "Post API", target.Name)
-	assert.Equal(t, "post API", target.Desc)
+	task := jsonParser.Task
+	assert.Equal(t, "Post API", task.Name)
+	assert.Equal(t, "post API", task.Desc)
 }
 
 func TestRunSuccess(t *testing.T) {
@@ -49,13 +49,13 @@ func TestRunSuccess(t *testing.T) {
 	bytes, err := ioutil.ReadFile("success.json")
 	assert.NoError(t, err)
 
-	target, err := jsonParser.Translate(bytes)
-	assert.Equal(t, "Post API", target.Name)
-	assert.Equal(t, "post API", target.Desc)
-	assert.Len(t, target.Watches, 1)
+	task, err := jsonParser.Translate(bytes)
+	assert.Equal(t, "Post API", task.Name)
+	assert.Equal(t, "post API", task.Desc)
+	assert.Len(t, task.Watches, 1)
 	assert.NoError(t, err)
 
-	watchResults, err := target.Run(context.Background())
+	watchResults, err := task.Run(context.Background())
 	assert.Nil(t, err)
 	assert.Len(t, watchResults[0].Assertions, 2)
 	assert.True(t, watchResults[0].Assertions[0].Success)
@@ -69,13 +69,13 @@ func TestRunFailure(t *testing.T) {
 	bytes, err := ioutil.ReadFile("failure.json")
 	assert.NoError(t, err)
 
-	target, err := jsonParser.Translate(bytes)
-	assert.Equal(t, "Post API", target.Name)
-	assert.Equal(t, "post API", target.Desc)
-	assert.Len(t, target.Watches, 1)
+	task, err := jsonParser.Translate(bytes)
+	assert.Equal(t, "Post API", task.Name)
+	assert.Equal(t, "post API", task.Desc)
+	assert.Len(t, task.Watches, 1)
 	assert.NoError(t, err)
 
-	watchResults, err := target.Run(context.Background())
+	watchResults, err := task.Run(context.Background())
 	assert.Nil(t, err)
 	assert.Len(t, watchResults, 1)
 	assert.Len(t, watchResults[0].Assertions, 2)
@@ -90,13 +90,13 @@ func TestRunMultipleAssertions(t *testing.T) {
 	bytes, err := ioutil.ReadFile("multiple_assertions.json")
 	assert.NoError(t, err)
 
-	target, err := jsonParser.Translate(bytes)
+	task, err := jsonParser.Translate(bytes)
 	assert.NoError(t, err)
-	assert.Equal(t, "Post API", target.Name)
-	assert.Equal(t, "post API", target.Desc)
-	assert.Len(t, target.Watches, 1)
+	assert.Equal(t, "Post API", task.Name)
+	assert.Equal(t, "post API", task.Desc)
+	assert.Len(t, task.Watches, 1)
 
-	watchResults, err := target.Run(context.Background())
+	watchResults, err := task.Run(context.Background())
 	assert.Nil(t, err)
 	assert.Len(t, watchResults, 1)
 	assert.Len(t, watchResults[0].Assertions, 3)
