@@ -58,6 +58,17 @@ func AllTasks() ([]model.Task, error) {
 	return allTasks, nil
 }
 
-func ListTask(page int, limit int) ([]*model.Task, error) {
-	return nil, nil
+func ListTask(maxID string, limit int) ([]model.Task, error) {
+	var tasks []model.Task
+	var err error
+	if maxID == "" {
+		err = taskCollection.Find(nil).Limit(limit).Sort("-_id").All(&tasks)
+	} else {
+		err = taskCollection.Find(bson.M{
+			"_id": bson.M{
+				"$lt": maxID,
+			},
+		}).Limit(limit).Sort("-_id").All(&tasks)
+	}
+	return tasks, err
 }

@@ -31,14 +31,23 @@ func NewWatchResult(watchResult *model.WatchResult) error {
 }
 
 // AllWatchResults fetches all watch results
-func AllWatchResults(taskName string) ([]model.WatchResult, error) {
+func AllWatchResults(taskName string, maxID string, limit int) ([]model.WatchResult, error) {
 	cnt, err := watchResultCollection.Count()
 	if err != nil {
 		return nil, err
 	}
 
+	cond := bson.M{
+		"taskname": taskName,
+	}
+	if maxID != "" {
+		cond["_id"] = bson.M{
+			"$lt": maxID,
+		}
+	}
+
 	allWatchResults := make([]model.WatchResult, cnt)
-	iter := watchResultCollection.Find(bson.M{"taskname": taskName}).Sort("-execution_time").Limit(1000).Iter()
+	iter := watchResultCollection.Find(cond).Sort("-_id").Limit(limit).Iter()
 	if err := iter.All(&allWatchResults); err != nil {
 		return nil, err
 	}

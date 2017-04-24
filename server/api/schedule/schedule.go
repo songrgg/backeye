@@ -1,26 +1,33 @@
 package schedule
 
 import (
-	"errors"
-
 	"github.com/labstack/echo"
 	"github.com/songrgg/backeye/dao"
 	"github.com/songrgg/backeye/helper"
 	"github.com/songrgg/backeye/model"
+	"github.com/songrgg/backeye/std"
 )
 
 func HTTPAddTask(ctx echo.Context) error {
 	args := &model.Task{}
 	if err := ctx.Bind(args); err != nil {
-		return helper.ErrorResponse(ctx, errors.New("fail to bind args"))
+		return helper.ErrorResponse(ctx, err)
 	}
 
-	return nil
+	err := dao.NewTask(args)
+	if err != nil {
+		return helper.ErrorResponse(ctx, err)
+	}
+
+	return helper.SuccessResponse(ctx, nil)
 }
 
 func HTTPGetTasks(ctx echo.Context) error {
-	task := listTasks(ctx)
-	return helper.SuccessResponse(ctx, task)
+	tasks, err := listTasks(ctx)
+	if err != nil {
+		return helper.ErrorResponse(ctx, err)
+	}
+	return helper.SuccessResponse(ctx, tasks)
 }
 
 func HTTPGetTask(ctx echo.Context) error {
@@ -53,12 +60,14 @@ func HTTPGetTaskHealth(ctx echo.Context) error {
 	return helper.SuccessResponse(ctx, getTaskHealth(ctx, id))
 }
 
-func listTasks(ctx echo.Context) *model.Task {
-	task, err := dao.GetTask("Post API")
+func listTasks(ctx echo.Context) ([]model.Task, error) {
+	maxID := std.FetchStrParam(ctx, "maxID", "")
+	limit := std.FetchIntParam(ctx, "limit", 10)
+	tasks, err := dao.ListTask(maxID, limit)
 	if err != nil {
-		return nil
+		return nil, err
 	}
-	return task
+	return tasks, nil
 }
 
 func getTask(ctx echo.Context, id string) *model.Task {
@@ -70,7 +79,9 @@ func getTask(ctx echo.Context, id string) *model.Task {
 }
 
 func getWatchResults(ctx echo.Context, taskName string, watchName string) []model.WatchResult {
-	results, err := dao.AllWatchResults(taskName)
+	maxID := std.FetchStrParam(ctx, "maxID", "")
+	limit := std.FetchIntParam(ctx, "limit", 10)
+	results, err := dao.AllWatchResults(taskName, maxID, limit)
 	if err != nil {
 		return nil
 	}
@@ -78,7 +89,9 @@ func getWatchResults(ctx echo.Context, taskName string, watchName string) []mode
 }
 
 func getTaskHealth(ctx echo.Context, taskName string) *model.TaskHealth {
-	results, err := dao.AllWatchResults(taskName)
+	maxID := std.FetchStrParam(ctx, "maxID", "")
+	limit := std.FetchIntParam(ctx, "limit", 10)
+	results, err := dao.AllWatchResults(taskName, maxID, limit)
 	if err != nil {
 		return nil
 	}
