@@ -8,6 +8,7 @@ import (
 
 // Task wraps the whole API task test
 type Task struct {
+	ID       int64
 	Name     string
 	Desc     string
 	CronSpec string

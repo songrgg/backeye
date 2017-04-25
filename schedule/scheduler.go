@@ -46,7 +46,7 @@ func (sch *Scheduler) LoadTasks(tasks []model.Task) error {
 	for _, task := range tasks {
 		t2, err := parser.TranslateModel(&task)
 		if err != nil {
-			std.LogErrorc("scheduler", err, fmt.Sprintf("fail to parse task %s", task.Name))
+			std.LogErrorc("scheduler", err, fmt.Sprintf("fail to translate model %s", task.Name))
 			continue
 		}
 		if err := sch.Create(t2); err != nil {

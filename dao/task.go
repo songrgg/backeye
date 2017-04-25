@@ -1,74 +1,162 @@
 package dao
 
 import (
+	"github.com/jinzhu/gorm"
 	"github.com/songrgg/backeye/model"
+	"github.com/songrgg/backeye/model/form"
+	"github.com/songrgg/backeye/std"
+	modelmapper "gopkg.in/jeevatkm/go-model.v0"
 
-	mgo "gopkg.in/mgo.v2"
-	"gopkg.in/mgo.v2/bson"
+	"time"
 )
 
-func NewTask(task *model.Task) error {
-	index := mgo.Index{
-		Key:        []string{"name"},
-		Unique:     true,
-		DropDups:   true,
-		Background: true, // See notes.
-		Sparse:     true,
+// NewTask2 creates a new task
+func NewTask2(f *form.Task) error {
+	nowTime := time.Now()
+	task := model.Task{
+		TimeMixin: std.TimeMixin{
+			CreatedAt: nowTime,
+			UpdatedAt: nowTime,
+		},
 	}
-	err := taskCollection.EnsureIndex(index)
-	if err != nil && !mgo.IsDup(err) {
+	errors := modelmapper.Copy(&task, f)
+	if len(errors) > 0 {
+		return errors[0]
+	}
+
+	// save task
+	db := model.DB().Save(&task)
+	if err := db.Error; err != nil {
+		std.LogErrorc("mysql", err, "failed to create task")
 		return err
 	}
 
-	err = taskCollection.Insert(task)
-	if err != nil {
-		if mgo.IsDup(err) {
-			return nil
+	if f.Watches != nil {
+		for _, watch := range f.Watches {
+			if err := NewWatch(task.ID, &watch); err != nil {
+				std.LogErrorc("mysql", err, "failed to create watch")
+				return err
+			}
 		}
+	}
+	return nil
+}
+
+// NewWatch creates new watch for specified task
+func NewWatch(taskID int64, f *form.Watch) error {
+	nowTime := time.Now()
+	w := model.Watch{
+		TaskID: taskID,
+		TimeMixin: std.TimeMixin{
+			CreatedAt: nowTime,
+			UpdatedAt: nowTime,
+		},
+	}
+
+	modelmapper.Copy(&w, f)
+	db := model.DB().Save(&w)
+	if err := db.Error; err != nil {
+		std.LogErrorc("mysql", err, "failed to create watch")
+		return err
+	}
+
+	for _, a := range f.Assertions {
+		if err := NewAssertion(w.ID, &a); err != nil {
+			std.LogErrorc("mysql", err, "failed to create assertion")
+			return err
+		}
+	}
+	return nil
+}
+
+// NewAssertion creates new assertion for specified watch
+func NewAssertion(watchID int64, f *form.Assertion) error {
+	nowTime := time.Now()
+	a := model.Assertion{
+		WatchID: watchID,
+		TimeMixin: std.TimeMixin{
+			CreatedAt: nowTime,
+			UpdatedAt: nowTime,
+		},
+	}
+
+	modelmapper.Copy(&a, f)
+	db := model.DB().Save(&a)
+	if err := db.Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func GetTask(name string) (*model.Task, error) {
-	task := model.Task{}
-	err := taskCollection.Find(bson.M{"name": name}).One(&task)
-	return &task, err
+func RemoveTask(id int64) error {
+	db := model.DB().Delete(nil, map[string]interface{}{"id": id})
+	if err := db.Error; err != nil {
+		return err
+	}
+	return nil
 }
 
-func RemoveTask(name string) error {
-	return taskCollection.Remove(bson.M{"name": name})
+func UpdateTask(id int64, f *form.Task) error {
+	task := model.Task{
+		TimeMixin: std.TimeMixin{
+			UpdatedAt: time.Now(),
+		},
+	}
+	modelmapper.Copy(&task, f)
+
+	db := model.DB().Find(&task, map[string]interface{}{"id": id}).Update(task)
+	if err := db.Error; err != nil {
+		return err
+	}
+	return nil
 }
 
-func UpdateTask(task *model.Task) error {
-	return taskCollection.Update(bson.M{"name": task.Name}, task)
+func GetTask(id int64) (*model.Task, error) {
+	var task model.Task
+	db := model.DB().Where(map[string]interface{}{"id": id}).First(&task)
+	if err := db.Error; err != nil {
+		return nil, err
+	}
+	return &task, nil
 }
 
 func AllTasks() ([]model.Task, error) {
-	cnt, err := taskCollection.Count()
-	if err != nil {
+	tasks := make([]model.Task, 0)
+	db := model.DB().Find(&tasks)
+	if err := db.Error; err != nil {
 		return nil, err
 	}
 
-	allTasks := make([]model.Task, cnt)
-	iter := taskCollection.Find(nil).Limit(1000).Iter()
-	if err := iter.All(&allTasks); err != nil {
-		return nil, err
+	for i := range tasks {
+		assembleTask(db, &tasks[i])
 	}
-	return allTasks, nil
+	return tasks, nil
+}
+
+func assembleTask(db *gorm.DB, t *model.Task) error {
+	var watches []model.Watch
+	db.Model(t).Related(&watches)
+
+	for i := range watches {
+		assembleWatch(db, &watches[i])
+	}
+
+	t.Watches = watches
+	return nil
+}
+
+func assembleWatch(db *gorm.DB, w *model.Watch) error {
+	var assertions []model.Assertion
+	db.Model(w).Related(&assertions)
+	w.Assertions = assertions
+	return nil
 }
 
 func ListTask(maxID string, limit int) ([]model.Task, error) {
-	var tasks []model.Task
-	var err error
-	if maxID == "" {
-		err = taskCollection.Find(nil).Limit(limit).Sort("-_id").All(&tasks)
-	} else {
-		err = taskCollection.Find(bson.M{
-			"_id": bson.M{
-				"$lt": maxID,
-			},
-		}).Limit(limit).Sort("-_id").All(&tasks)
+	tasks := make([]model.Task, 0)
+	db := model.DB().Find(&tasks)
+	if err := db.Error; err != nil {
+		return nil, err
 	}
-	return tasks, err
+	return tasks, nil
 }

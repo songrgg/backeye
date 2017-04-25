@@ -5,3 +5,12 @@ schedules:
 
 log:
   level: 5
+
+mysql:
+    username: root
+    password: root
+    host: "127.0.0.1"
+    port: 3306
+    db_name: "backeye"
+    max_idle: 50
+    max_conn: 100

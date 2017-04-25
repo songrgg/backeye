@@ -5,17 +5,20 @@ import (
 	"github.com/songrgg/backeye/dao"
 	"github.com/songrgg/backeye/helper"
 	"github.com/songrgg/backeye/model"
+	"github.com/songrgg/backeye/model/form"
 	"github.com/songrgg/backeye/std"
 )
 
 func HTTPAddTask(ctx echo.Context) error {
-	args := &model.Task{}
+	args := &form.Task{}
 	if err := ctx.Bind(args); err != nil {
+		std.LogErrorc("echo", err, "failed to bind args")
 		return helper.ErrorResponse(ctx, err)
 	}
 
-	err := dao.NewTask(args)
+	err := dao.NewTask2(args)
 	if err != nil {
+		std.LogErrorc("backeye", err, "failed to create task")
 		return helper.ErrorResponse(ctx, err)
 	}
 
@@ -31,22 +34,36 @@ func HTTPGetTasks(ctx echo.Context) error {
 }
 
 func HTTPGetTask(ctx echo.Context) error {
-	id := ctx.Param("id")
-	if id == "" {
-		return ctx.JSON(200, helper.Payload(nil))
+	id := std.GetID(ctx)
+	task, err := getTask(ctx, id)
+	if err != nil {
+		return helper.ErrorResponse(ctx, err)
 	}
-	task := getTask(ctx, id)
 	return helper.SuccessResponse(ctx, task)
 }
 
 func HTTPDeleteTask(ctx echo.Context) error {
-	id := ctx.Param("id")
-	dao.RemoveTask(id)
-	return helper.SuccessResponse(ctx, helper.Payload(nil))
+	id := std.GetID(ctx)
+	err := dao.RemoveTask(id)
+	if err != nil {
+		return helper.ErrorResponse(ctx, err)
+	}
+	return helper.SuccessResponse(ctx, nil)
 }
 
 func HTTPUpdateTask(ctx echo.Context) error {
-	return nil
+	id := std.GetID(ctx)
+	args := &form.Task{}
+	if err := ctx.Bind(args); err != nil {
+		std.LogErrorc("echo", err, "failed to bind args")
+		return helper.ErrorResponse(ctx, err)
+	}
+
+	err := dao.UpdateTask(id, args)
+	if err != nil {
+		return helper.ErrorResponse(ctx, err)
+	}
+	return helper.SuccessResponse(ctx, nil)
 }
 
 func HTTPGetWatchResults(ctx echo.Context) error {
@@ -56,8 +73,7 @@ func HTTPGetWatchResults(ctx echo.Context) error {
 }
 
 func HTTPGetTaskHealth(ctx echo.Context) error {
-	id := ctx.Param("id")
-	return helper.SuccessResponse(ctx, getTaskHealth(ctx, id))
+	return nil
 }
 
 func listTasks(ctx echo.Context) ([]model.Task, error) {
@@ -70,12 +86,8 @@ func listTasks(ctx echo.Context) ([]model.Task, error) {
 	return tasks, nil
 }
 
-func getTask(ctx echo.Context, id string) *model.Task {
-	task, err := dao.GetTask(id)
-	if err != nil {
-		return nil
-	}
-	return task
+func getTask(ctx echo.Context, id int64) (*model.Task, error) {
+	return dao.GetTask(id)
 }
 
 func getWatchResults(ctx echo.Context, taskName string, watchName string) []model.WatchResult {
@@ -88,26 +100,26 @@ func getWatchResults(ctx echo.Context, taskName string, watchName string) []mode
 	return results
 }
 
-func getTaskHealth(ctx echo.Context, taskName string) *model.TaskHealth {
-	maxID := std.FetchStrParam(ctx, "maxID", "")
-	limit := std.FetchIntParam(ctx, "limit", 10)
-	results, err := dao.AllWatchResults(taskName, maxID, limit)
-	if err != nil {
-		return nil
-	}
+// func getTaskHealth(ctx echo.Context, taskName string) *model.TaskHealth {
+// 	maxID := std.FetchStrParam(ctx, "maxID", "")
+// 	limit := std.FetchIntParam(ctx, "limit", 10)
+// 	results, err := dao.AllWatchResults(taskName, maxID, limit)
+// 	if err != nil {
+// 		return nil
+// 	}
 
-	total := 0
-	success := 0
-	for _, result := range results {
-		for _, assertion := range result.Assertions {
-			if assertion.Success {
-				success++
-			}
-			total++
-		}
-	}
-	return &model.TaskHealth{
-		Total:   total,
-		Success: success,
-	}
-}
+// 	total := 0
+// 	success := 0
+// 	for _, result := range results {
+// 		for _, assertion := range result.Assertions {
+// 			if assertion.Success {
+// 				success++
+// 			}
+// 			total++
+// 		}
+// 	}
+// 	return &model.TaskHealth{
+// 		Total:   total,
+// 		Success: success,
+// 	}
+// }
