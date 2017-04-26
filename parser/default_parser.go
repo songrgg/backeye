@@ -1,4 +1,4 @@
-package json
+package parser
 
 import (
 	"context"
@@ -11,17 +11,20 @@ import (
 
 	"github.com/songrgg/backeye/assertion"
 	"github.com/songrgg/backeye/model"
+	"github.com/songrgg/backeye/std"
 	"github.com/songrgg/backeye/task"
 	"github.com/songrgg/backeye/watch"
 	"github.com/songrgg/backeye/watch/http"
+	modelmapper "gopkg.in/jeevatkm/go-model.v0"
 )
 
-type Parser struct {
+type DefaultParser struct {
 	Task *Task
 }
 
 // Task defines the JSON
 type Task struct {
+	ID      int64   `json:"id"`
 	Name    string  `json:"name"`
 	Desc    string  `json:"desc"`
 	Cron    string  `json:"cron"`
@@ -52,7 +55,7 @@ type Assertion struct {
 	Right    string `json:"right"`
 }
 
-func (p *Parser) load(data []byte) error {
+func (p *DefaultParser) load(data []byte) error {
 	task := Task{}
 	err := json.Unmarshal(data, &task)
 	if err != nil {
@@ -64,36 +67,23 @@ func (p *Parser) load(data []byte) error {
 }
 
 // TranslateModel translates model to task
-func (p *Parser) TranslateModel(t *model.Task) (*task.Task, error) {
-	bytes, err := json.Marshal(t)
-	if err != nil {
-		return nil, err
-	}
-	return p.Translate(bytes)
-}
-
-// Translate translates JSON to task
-func (p *Parser) Translate(data interface{}) (*task.Task, error) {
-	bytes := data.([]byte)
-	if err := p.load(bytes); err != nil {
-		return nil, err
-	}
-
+func (p *DefaultParser) ParseTask(t *model.Task) (*task.Task, error) {
 	task := task.Task{}
-	if p.Task != nil {
-		task.Name = p.Task.Name
-		task.Desc = p.Task.Desc
-		task.CronSpec = p.Task.Cron
-	}
+	modelmapper.Copy(&task, t)
 
-	task.Watches = make([]watch.Watch, 0)
-	for _, watch := range p.Task.Watches {
-		task.Watches = append(task.Watches, parseWatch(&watch))
+	watches := make([]watch.Watch, 0)
+	for i := range t.Watches {
+		watch, err := p.ParseWatch(&t.Watches[i])
+		if err != nil {
+			std.LogErrorc("default_parser", err, "failed to parse watch")
+		}
+		watches = append(watches, watch)
 	}
+	task.Watches = watches
 	return &task, nil
 }
 
-func parseWatch(w *Watch) watch.Watch {
+func (p *DefaultParser) ParseWatch(w *model.Watch) (watch.Watch, error) {
 
 	watch := &http.Watch{
 		Name: w.Name,
@@ -114,26 +104,26 @@ func parseWatch(w *Watch) watch.Watch {
 	}
 
 	// parse path variables
-	pathVars := make(map[string]string)
-	for _, pathvar := range w.PathVariables {
-		pathVars[pathvar.Name] = pathvar.Value
-	}
-	watch.PathVariables = pathVars
+	// pathVars := make(map[string]string)
+	// for _, pathvar := range w.PathVariables {
+	// 	pathVars[pathvar.Name] = pathvar.Value
+	// }
+	// watch.PathVariables = pathVars
 
 	if w.Timeout > 0 {
 		watch.Timeout = time.Duration(w.Timeout) * time.Millisecond
 	}
 
 	assertions := make([]assertion.AssertionFunc, 0)
-	for _, assertion := range w.Assertions {
-		assertions = append(assertions, parseAssertion(assertion))
+	for i := range w.Assertions {
+		assertions = append(assertions, p.parseAssertion(&w.Assertions[i]))
 	}
 	watch.Assertions = assertions
 
-	return watch
+	return watch, nil
 }
 
-func parseAssertion(t Assertion) assertion.AssertionFunc {
+func (p *DefaultParser) parseAssertion(t *model.Assertion) assertion.AssertionFunc {
 	return func(ctx context.Context, resp *nethttp.Response) assertion.AssertionResult {
 		body := ctx.Value(watch.ResponseBody)
 
@@ -183,4 +173,25 @@ func parseAssertion(t Assertion) assertion.AssertionFunc {
 			Error:   err,
 		}
 	}
+}
+
+// Translate translates JSON to task
+func (p *DefaultParser) Translate(data interface{}) (*task.Task, error) {
+	return p.ParseTask(data.(*model.Task))
+	// if err := p.load(data); err != nil {
+	// 	return nil, err
+	// }
+
+	// task := task.Task{}
+	// if p.Task != nil {
+	// 	task.Name = p.Task.Name
+	// 	task.Desc = p.Task.Desc
+	// 	task.CronSpec = p.Task.Cron
+	// }
+
+	// task.Watches = make([]watch.Watch, 0)
+	// for _, watch := range p.Task.Watches {
+	// 	task.Watches = append(task.Watches, parseWatch(&watch))
+	// }
+	// return &task, nil
 }

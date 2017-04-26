@@ -16,11 +16,12 @@ const (
 
 // Watch defines an API watch
 type Watch interface {
-	Run(ctx context.Context) (WatchResult, error)
+	Run(ctx context.Context) (Result, error)
 }
 
-// WatchResult indicates the watch's result
-type WatchResult struct {
+// Result indicates the watch's result
+type Result struct {
+	TaskID        int64
 	TaskName      string
 	WatchName     string
 	ExecutionTime time.Time

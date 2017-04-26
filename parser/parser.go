@@ -8,7 +8,7 @@ import (
 // Parser translates the source to the api test task
 type Parser interface {
 	// Translate execute the input
-	Translate(data []byte) (*task.Task, error)
+	Translate(data interface{}) (*task.Task, error)
 }
 
 const (
@@ -20,6 +20,7 @@ func NewParser(taskType string, input string) Parser {
 	switch taskType {
 	case JSON:
 		return &json.Parser{}
+	default:
+		return &DefaultParser{}
 	}
-	return nil
 }

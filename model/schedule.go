@@ -32,6 +32,7 @@ type Watch struct {
 	Name       string `gorm:"type:varchar(256)"`
 	Desc       string `gorm:"type:varchar(1024)"`
 	Interval   int32
+	Timeout    int32  // TODO: add timeout support
 	Path       string `gorm:"type:varchar(512)"`
 	Method     string `gorm:"type:varchar(512)"`
 	Headers    string `gorm:"type:longtext"`
@@ -45,7 +46,6 @@ type Assertion struct {
 	WatchID  int64  `gorm:"index"`
 	Type     string `gorm:"varchar(64)"`
 	Code     string `gorm:"varchar(32)"`
-	Timeout  int32  // TODO: add timeout support
 	Source   string `gorm:"varchar(64)"`
 	Operator string `gorm:"varchar(64)"`
 	Left     string `gorm:"varchar(128)"`

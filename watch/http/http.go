@@ -44,15 +44,15 @@ type Watch struct {
 }
 
 // Run executes this watch
-func (w *Watch) Run(ctx context.Context) (watch.WatchResult, error) {
-	var task string
-	if ctx.Value("task") != nil {
-		task = ctx.Value("task").(string)
+func (w *Watch) Run(ctx context.Context) (watch.Result, error) {
+	var taskID int64
+	if ctx.Value("task_id") != nil {
+		taskID = ctx.Value("task_id").(int64)
 	} else {
-		task = ""
+		taskID = 0
 	}
-	result := watch.WatchResult{
-		TaskName:      task,
+	result := watch.Result{
+		TaskID:        taskID,
 		WatchName:     w.Name,
 		ExecutionTime: time.Now(),
 	}

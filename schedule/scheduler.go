@@ -7,7 +7,7 @@ import (
 
 	"github.com/robfig/cron"
 	"github.com/songrgg/backeye/model"
-	"github.com/songrgg/backeye/parser/json"
+	"github.com/songrgg/backeye/parser"
 	"github.com/songrgg/backeye/std"
 	"github.com/songrgg/backeye/task"
 	"github.com/songrgg/backeye/watch"
@@ -25,7 +25,7 @@ const (
 // Scheduler defines the api test's schedule rule
 type Scheduler struct {
 	schedules    map[string]*Schedule
-	WatchResults chan watch.WatchResult
+	WatchResults chan watch.Result
 }
 
 // Schedule includes a schedule task and cronjob
@@ -42,9 +42,9 @@ var (
 
 // LoadTasks loads task
 func (sch *Scheduler) LoadTasks(tasks []model.Task) error {
-	parser := json.Parser{}
+	parser := parser.DefaultParser{}
 	for _, task := range tasks {
-		t2, err := parser.TranslateModel(&task)
+		t2, err := parser.Translate(&task)
 		if err != nil {
 			std.LogErrorc("scheduler", err, fmt.Sprintf("fail to translate model %s", task.Name))
 			continue
@@ -53,6 +53,12 @@ func (sch *Scheduler) LoadTasks(tasks []model.Task) error {
 			std.LogErrorc("scheduler", err, fmt.Sprintf("fail to create task %s", t2.Name))
 			continue
 		}
+
+		if task.Status != "active" {
+			std.LogInfoc("scheduler", fmt.Sprintf("task %d is inactive now", task.ID))
+			continue
+		}
+
 		if err := sch.Start(t2.Name); err != nil {
 			std.LogErrorc("scheduler", err, fmt.Sprintf("fail to start task %s", t2.Name))
 			continue
@@ -64,7 +70,7 @@ func (sch *Scheduler) LoadTasks(tasks []model.Task) error {
 func newScheduler() *Scheduler {
 	return &Scheduler{
 		schedules:    make(map[string]*Schedule),
-		WatchResults: make(chan watch.WatchResult, 1000),
+		WatchResults: make(chan watch.Result, 1000),
 	}
 }
 
@@ -127,7 +133,7 @@ func (sch *Scheduler) getSchedule(name string) (*Schedule, error) {
 	return nil, errors.New("schedule not found")
 }
 
-func parseCron(t *task.Task, wr chan watch.WatchResult) *cron.Cron {
+func parseCron(t *task.Task, wr chan watch.Result) *cron.Cron {
 	c := cron.New()
 	c.AddFunc(t.CronSpec, func() {
 		results, err := t.Run(context.Background())
