@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/songrgg/backeye/common"
 	"github.com/songrgg/backeye/dao"
 	"github.com/songrgg/backeye/model"
@@ -35,6 +37,7 @@ func watchResults() {
 
 			resultStatus := "success"
 			for i, as := range watchResult.Assertions {
+				now := time.Now()
 				msg := ""
 				if as.Error != nil {
 					msg = as.Error.Error()
@@ -47,8 +50,14 @@ func watchResults() {
 					resultStatus = "failed"
 				}
 				assertionResults[i] = model.AssertionResult{
-					Status:  status,
-					Message: msg,
+					AssertionID:       as.AssertionID,
+					Status:            status,
+					ExecutionDuration: as.ExecutionDuration.Nanoseconds(),
+					Message:           msg,
+					TimeMixin: std.TimeMixin{
+						CreatedAt: now,
+						UpdatedAt: now,
+					},
 				}
 			}
 

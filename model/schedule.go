@@ -28,15 +28,16 @@ type Task struct {
 // Watch sets the tasks' API watch method
 type Watch struct {
 	ID         int64  `gorm:"primary_key"`
-	TaskID     int64  `gorm:"task_id"`
+	TaskID     int64  `gorm:"index"`
 	Name       string `gorm:"type:varchar(256)"`
 	Desc       string `gorm:"type:varchar(1024)"`
 	Interval   int32
-	Timeout    int32  // TODO: add timeout support
-	Path       string `gorm:"type:varchar(512)"`
-	Method     string `gorm:"type:varchar(512)"`
-	Headers    string `gorm:"type:longtext"`
-	Assertions []Assertion
+	Timeout    int32       // TODO: add timeout support
+	Path       string      `gorm:"type:varchar(512)"`
+	Method     string      `gorm:"type:varchar(512)"`
+	Headers    string      `gorm:"type:longtext"`
+	Assertions []Assertion `gorm:"ForeignKey:WatchID"`
+	Variables  []Variable  `gorm:"ForeignKey:WatchID"`
 	std.TimeMixin
 }
 
@@ -52,6 +53,14 @@ type Assertion struct {
 	Right    string `gorm:"varchar(128)"`
 	Revision int32
 	std.TimeMixin
+}
+
+// Variable is
+type Variable struct {
+	ID      int64  `gorm:"primary_key"`
+	WatchID int64  `gorm:"index"`
+	Name    string `gorm:"varchar(128)"`
+	Value   string `gorm:"type:longtext"`
 }
 
 // WatchResult indicates the watch's result

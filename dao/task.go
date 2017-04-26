@@ -136,11 +136,9 @@ func AllTasks() ([]model.Task, error) {
 func assembleTask(db *gorm.DB, t *model.Task) error {
 	var watches []model.Watch
 	db.Model(t).Related(&watches)
-
 	for i := range watches {
 		assembleWatch(db, &watches[i])
 	}
-
 	t.Watches = watches
 	return nil
 }
@@ -149,6 +147,10 @@ func assembleWatch(db *gorm.DB, w *model.Watch) error {
 	var assertions []model.Assertion
 	db.Model(w).Related(&assertions)
 	w.Assertions = assertions
+
+	var variables []model.Variable
+	db.Model(w).Related(&variables)
+	w.Variables = variables
 	return nil
 }
 
