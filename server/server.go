@@ -4,11 +4,14 @@ import (
 	"github.com/labstack/echo"
 	"github.com/songrgg/backeye/common"
 	"github.com/songrgg/backeye/server/api/schedule"
+	"github.com/songrgg/backeye/server/middleware"
 )
 
 var app = echo.New()
 
 func init() {
+	app.Use(middleware.RequestCORS())
+
 	mountAPIModule(app)
 }
 
