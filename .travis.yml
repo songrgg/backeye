@@ -10,9 +10,7 @@ env:
   global:
     - GORACE="halt_on_error=1"
 
-install:
-  - go get github.com/mattn/goveralls
-
 script:
   - go test ./... -race
+  - go get github.com/mattn/goveralls
   - goveralls -service travis-ci
