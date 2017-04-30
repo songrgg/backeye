@@ -14,5 +14,5 @@ install:
   - go get github.com/mattn/goveralls
 
 script:
+  - go test ./... -race
   - goveralls -service travis-ci
-  # - go test ./... -race
