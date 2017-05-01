@@ -1,11 +1,16 @@
 sudo: false
 language: go
-script:
-  - go test ./... -race
+
 go:
   - 1.7.3
   - 1.8
   - tip
+
 env:
   global:
     - GORACE="halt_on_error=1"
+
+script:
+  # - go test ./... -race
+  - go get github.com/mattn/goveralls
+  - goveralls -service travis-ci

@@ -106,8 +106,8 @@ const (
 
 // TimeMixin mixin
 type TimeMixin struct {
-	CreatedAt time.Time `gorm:"column:created_at;type:TIMESTAMP(6);default:CURRENT_TIMESTAMP(6);index"`
-	UpdatedAt time.Time `gorm:"column:updated_at;type:TIMESTAMP(6);default:CURRENT_TIMESTAMP(6);index"`
+	CreatedAt time.Time `gorm:"column:created_at;type:TIMESTAMP(6);default:CURRENT_TIMESTAMP(6);index" json:"created_at"`
+	UpdatedAt time.Time `gorm:"column:updated_at;type:TIMESTAMP(6);default:CURRENT_TIMESTAMP(6);index" json:"updated_at"`
 }
 
 // Logger customizes the gorm logger.

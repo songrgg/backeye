@@ -77,7 +77,7 @@ func newScheduler() *Scheduler {
 // Create a schedule
 func (sch *Scheduler) Create(t *task.Task) error {
 	if _, err := sch.getSchedule(t.Name); err == nil {
-		std.LogErrorc("mongo", nil, "schedule already exists")
+		std.LogErrorc("scheduler", nil, "schedule already exists")
 		return nil
 	}
 
@@ -86,7 +86,7 @@ func (sch *Scheduler) Create(t *task.Task) error {
 		cron:   parseCron(t, sch.WatchResults),
 		status: STOPPED,
 	}
-	std.LogInfoc("mongo", fmt.Sprintf("schedule %s added", t.Name))
+	std.LogInfoc("scheduler", fmt.Sprintf("schedule %s added", t.Name))
 	return nil
 }
 
@@ -94,12 +94,12 @@ func (sch *Scheduler) Create(t *task.Task) error {
 func (sch *Scheduler) Start(name string) (err error) {
 	var schedule *Schedule
 	if schedule, err = sch.getSchedule(name); err != nil {
-		std.LogErrorc("mongo", nil, fmt.Sprintf("schedule %s not exists", name))
+		std.LogErrorc("scheduler", nil, fmt.Sprintf("schedule %s not exists", name))
 		return err
 	}
 	schedule.status = RUNNING
 	schedule.cron.Start()
-	std.LogInfoc("mongo", fmt.Sprintf("schedule %s started", name))
+	std.LogInfoc("scheduler", fmt.Sprintf("schedule %s started", name))
 	return nil
 }
 

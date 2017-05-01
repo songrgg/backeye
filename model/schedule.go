@@ -4,73 +4,82 @@ import "github.com/songrgg/backeye/std"
 
 // Project describes the API testing project
 type Project struct {
-	ID     int64  `gorm:"primary_key"`
-	Name   string `gorm:"type:varchar(256)"`
-	Desc   string `gorm:"type:varchar(1024)"`
-	Status string `gorm:"type:varchar(64)"`
-	Tasks  []Task
+	ID     int64  `gorm:"primary_key" json:"id"`
+	Name   string `gorm:"type:varchar(256)" json:"name"`
+	Desc   string `gorm:"type:varchar(1024)" json:"desc"`
+	Status string `gorm:"type:varchar(64)" json:"status"`
+	Tasks  []Task `json:"tasks"`
 	std.TimeMixin
 }
 
 // Task sets the API testing task
 type Task struct {
-	ID        int64   `gorm:"primary_key"`
-	ProjectID int64   `gorm:"index"`
-	Name      string  `gorm:"type:varchar(256)"`
-	Type      string  `gorm:"type:varchar(64)"`
-	Status    string  `gorm:"type:varchar(64)"`
-	Desc      string  `gorm:"type:varchar(1024)"`
-	CronSpec  string  `gorm:"type:varchar(256)"`
-	Watches   []Watch `gorm:"ForeignKey:TaskID"`
+	ID        int64   `gorm:"primary_key" json:"id"`
+	ProjectID int64   `gorm:"index" json:"project_id"`
+	Name      string  `gorm:"type:varchar(256)" json:"name"`
+	Type      string  `gorm:"type:varchar(64)" json:"type"`
+	Status    string  `gorm:"type:varchar(64)" json:"status"`
+	Desc      string  `gorm:"type:varchar(1024)" json:"desc"`
+	CronSpec  string  `gorm:"type:varchar(256)" json:"cron_spec"`
+	Watches   []Watch `gorm:"ForeignKey:TaskID" json:"watches,omitempty"`
 	std.TimeMixin
 }
 
 // Watch sets the tasks' API watch method
 type Watch struct {
-	ID         int64  `gorm:"primary_key"`
-	TaskID     int64  `gorm:"task_id"`
-	Name       string `gorm:"type:varchar(256)"`
-	Desc       string `gorm:"type:varchar(1024)"`
-	Interval   int32
-	Timeout    int32  // TODO: add timeout support
-	Path       string `gorm:"type:varchar(512)"`
-	Method     string `gorm:"type:varchar(512)"`
-	Headers    string `gorm:"type:longtext"`
-	Assertions []Assertion
+	ID         int64       `gorm:"primary_key" json:"id"`
+	TaskID     int64       `gorm:"index" json:"task_id"`
+	Name       string      `gorm:"type:varchar(256)" json:"name"`
+	Desc       string      `gorm:"type:varchar(1024)" json:"desc"`
+	Interval   int32       `json:"interval"`
+	Timeout    int32       `json:"timeout"` // TODO: add timeout support
+	Path       string      `gorm:"type:varchar(512)" json:"path"`
+	Method     string      `gorm:"type:varchar(512)" json:"method"`
+	Headers    string      `gorm:"type:longtext" json:"headers"`
+	Assertions []Assertion `gorm:"ForeignKey:WatchID" json:"assertions"`
+	Variables  []Variable  `gorm:"ForeignKey:WatchID" json:"variables"`
 	std.TimeMixin
 }
 
 // Assertion indicates the watch's assertion logic
 type Assertion struct {
-	ID       int64  `gorm:"primary_key"`
-	WatchID  int64  `gorm:"index"`
-	Type     string `gorm:"varchar(64)"`
-	Code     string `gorm:"varchar(32)"`
-	Source   string `gorm:"varchar(64)"`
-	Operator string `gorm:"varchar(64)"`
-	Left     string `gorm:"varchar(128)"`
-	Right    string `gorm:"varchar(128)"`
-	Revision int32
+	ID       int64  `gorm:"primary_key" json:"id"`
+	WatchID  int64  `gorm:"index" json:"watch_id"`
+	Type     string `gorm:"varchar(64)" json:"type"`
+	Code     string `gorm:"varchar(32)" json:"code"`
+	Source   string `gorm:"varchar(64)" json:"source"`
+	Operator string `gorm:"varchar(64)" json:"operator"`
+	Left     string `gorm:"varchar(128)" json:"left"`
+	Right    string `gorm:"varchar(128)" json:"right"`
+	Revision int32  `json:"revision"`
 	std.TimeMixin
+}
+
+// Variable is
+type Variable struct {
+	ID      int64  `gorm:"primary_key"`
+	WatchID int64  `gorm:"index"`
+	Name    string `gorm:"varchar(128)"`
+	Value   string `gorm:"type:longtext"`
 }
 
 // WatchResult indicates the watch's result
 type WatchResult struct {
-	ID               int64  `gorm:"primary_key"`
-	TaskID           int64  `gorm:"index"`
-	Status           string `gorm:"type:varchar(32)"`
-	AssertionResults []AssertionResult
+	ID               int64             `gorm:"primary_key" json:"id"`
+	TaskID           int64             `gorm:"index" json:"task_id"`
+	Status           string            `gorm:"type:varchar(32)" json:"status"`
+	AssertionResults []AssertionResult `json:"assertion_results"`
 	std.TimeMixin
 }
 
 // AssertionResult indicates the assertion result
 type AssertionResult struct {
-	ID                int64  `gorm:"primary_key"`
-	WatchResultID     int64  `gorm:"index"`
-	AssertionID       int64  `gorm:"index"`
-	Status            string `gorm:"varchar(64)"`
-	Message           string `gorm:"varchar(2048)"`
-	ExecutionDuration int64
+	ID                int64  `gorm:"primary_key" json:"id"`
+	WatchResultID     int64  `gorm:"index" json:"watchresult_id"`
+	AssertionID       int64  `gorm:"index" json:"assertion_id"`
+	Status            string `gorm:"varchar(64)" json:"status"`
+	Message           string `gorm:"varchar(2048)" json:"message"`
+	ExecutionDuration int64  `json:"execution_duration"`
 	std.TimeMixin
 }
 

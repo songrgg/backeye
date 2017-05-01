@@ -6,13 +6,14 @@ type Project struct {
 }
 
 type Task struct {
-	ProjectID int64   `json:"project_id"`
-	Name      string  `json:"name"`
-	Type      string  `json:"type"`
-	Status    string  `json:"status"`
-	Desc      string  `json:"desc"`
-	CronSpec  string  `json:"cron"`
-	Watches   []Watch `json:"watches"`
+	ProjectID int64      `json:"project_id"`
+	Name      string     `json:"name"`
+	Type      string     `json:"type"`
+	Status    string     `json:"status"`
+	Desc      string     `json:"desc"`
+	CronSpec  string     `json:"cron"`
+	Watches   []Watch    `json:"watches"`
+	Variables []Variable `json:"variables"`
 }
 
 type Watch struct {
@@ -23,6 +24,11 @@ type Watch struct {
 	Method     string            `json:"method"`
 	Headers    map[string]string `json:"headers"`
 	Assertions []Assertion       `json:"assertions"`
+}
+
+type Variable struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
 }
 
 type Assertion struct {
