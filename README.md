@@ -20,6 +20,8 @@ go run main.go
 ### API document
 Access [http://localhost:9876/swagger-ui/index.html](http://localhost:9876/swagger-ui/index.html).
 
+![API swagger](https://raw.githubusercontent.com/songrgg/backeye/feature/swagger-doc/public/swagger-ui/images/backeye-swagger.png)
+
 ### API testing cases
 
 #### Sample API monitor definition
