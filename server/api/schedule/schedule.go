@@ -9,6 +9,12 @@ import (
 	"github.com/songrgg/backeye/std"
 )
 
+// @Title task
+// @Description create task for API testing
+// @Param   args	body  form.Task    true	"API testing task"
+// @Accept  json
+// @Resource task
+// @Router /v1/tasks [post]
 func HTTPAddTask(ctx echo.Context) error {
 	args := &form.Task{}
 	if err := ctx.Bind(args); err != nil {
@@ -25,6 +31,11 @@ func HTTPAddTask(ctx echo.Context) error {
 	return helper.SuccessResponse(ctx, nil)
 }
 
+// @Title task
+// @Description fetch task list
+// @Accept  json
+// @Resource task
+// @Router /v1/tasks [get]
 func HTTPGetTasks(ctx echo.Context) error {
 	tasks, err := listTasks(ctx)
 	if err != nil {
@@ -33,6 +44,12 @@ func HTTPGetTasks(ctx echo.Context) error {
 	return helper.SuccessResponse(ctx, tasks)
 }
 
+// @Title task
+// @Description fetch the specified task
+// @Param   id     			path    	int   	  	true 		"task id"
+// @Accept  json
+// @Resource task
+// @Router /v1/tasks/{id} [get]
 func HTTPGetTask(ctx echo.Context) error {
 	id := std.GetID(ctx)
 	task, err := getTask(ctx, id)
@@ -42,6 +59,12 @@ func HTTPGetTask(ctx echo.Context) error {
 	return helper.SuccessResponse(ctx, task)
 }
 
+// @Title task
+// @Description delete the specified task
+// @Param   id     			path    	int   	  	true 		"task id"
+// @Accept  json
+// @Resource task
+// @Router /v1/tasks/{id} [delete]
 func HTTPDeleteTask(ctx echo.Context) error {
 	id := std.GetID(ctx)
 	err := dao.RemoveTask(id)
@@ -51,6 +74,13 @@ func HTTPDeleteTask(ctx echo.Context) error {
 	return helper.SuccessResponse(ctx, nil)
 }
 
+// @Title task
+// @Description update the specified task
+// @Param   id     			path    	int   	  	true 		"task id"
+// @Param   args	body  form.Task    true	"API testing task"
+// @Accept  json
+// @Resource task
+// @Router /v1/tasks/{id} [put]
 func HTTPUpdateTask(ctx echo.Context) error {
 	id := std.GetID(ctx)
 	args := &form.Task{}

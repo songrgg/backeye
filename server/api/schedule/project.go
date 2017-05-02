@@ -10,6 +10,12 @@ import (
 	"github.com/songrgg/backeye/std"
 )
 
+// @Title project
+// @Description add project
+// @Param   args	body  form.Project    true	"API testing project"
+// @Accept  json
+// @Resource project
+// @Router /v1/projects [post]
 func httpAddProject(ctx echo.Context) error {
 	args := &form.Project{}
 	if err := ctx.Bind(args); err != nil {
@@ -26,6 +32,11 @@ func httpAddProject(ctx echo.Context) error {
 	return helper.SuccessResponse(ctx, nil)
 }
 
+// @Title project
+// @Description fetch project list
+// @Accept  json
+// @Resource project
+// @Router /v1/projects [get]
 func httpGetProjects(ctx echo.Context) error {
 	projs, err := dao.GetProjects()
 	if err != nil {
@@ -36,6 +47,12 @@ func httpGetProjects(ctx echo.Context) error {
 	return helper.SuccessResponse(ctx, projs)
 }
 
+// @Title project
+// @Description fetch the specified project
+// @Param   id     			path    	int   	  	true 		"project id"
+// @Accept  json
+// @Resource project
+// @Router /v1/projects/{id} [get]
 func httpGetProject(ctx echo.Context) error {
 	id := ctx.Param("id")
 	ID, err := strconv.ParseInt(id, 10, 64)
@@ -52,6 +69,12 @@ func httpGetProject(ctx echo.Context) error {
 	return helper.SuccessResponse(ctx, proj)
 }
 
+// @Title project
+// @Description delete the specified project
+// @Param   id     			path    	int   	  	true 		"project id"
+// @Accept  json
+// @Resource project
+// @Router /v1/projects/{id} [delete]
 func httpDeleteProject(ctx echo.Context) error {
 	id := ctx.Param("id")
 	ID, err := strconv.ParseInt(id, 10, 64)
@@ -69,6 +92,13 @@ func httpDeleteProject(ctx echo.Context) error {
 	return helper.SuccessResponse(ctx, nil)
 }
 
+// @Title project
+// @Description update the specified project
+// @Param   id     			path    	int   	  	true 		"project id"
+// @Param   args	body  form.Project    true	"API testing project"
+// @Accept  json
+// @Resource project
+// @Router /v1/projects/{id} [put]
 func httpUpdateProject(ctx echo.Context) error {
 	id := ctx.Param("id")
 	ID, err := strconv.ParseInt(id, 10, 64)

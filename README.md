@@ -8,7 +8,23 @@ Another API accuracy monitor tool.
 
 Try to fetch & check HTTP API & RPC cronly.
 
-### Sample API monitor definition
+
+### Quick start
+Take MySQL ready, and make sure it's accessible, update the `conf/backeye.yaml`.
+
+Start the server
+```shell
+go run main.go
+```
+
+### API document
+Access [http://localhost:9876/swagger-ui/index.html](http://localhost:9876/swagger-ui/index.html).
+
+![API swagger](https://raw.githubusercontent.com/songrgg/backeye/feature/swagger-doc/public/swagger-ui/images/backeye-swagger.png)
+
+### API testing cases
+
+#### Sample API monitor definition
 1. Add single watch to one task
 
 ```json
@@ -51,7 +67,7 @@ Try to fetch & check HTTP API & RPC cronly.
 }
 ```
 
-### Multiple API watches
+#### Multiple API watches
 1. Add multiple watches to one task
 2. Share the variables exported by last watch
 
