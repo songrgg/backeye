@@ -5,6 +5,7 @@ import (
 	"github.com/songrgg/backeye/common"
 	"github.com/songrgg/backeye/server/api/schedule"
 	"github.com/songrgg/backeye/server/middleware"
+	"github.com/songrgg/backeye/server/swagger"
 )
 
 var app = echo.New()
@@ -27,4 +28,5 @@ func RunServer() {
 func mountAPIModule(e *echo.Echo) {
 	apiv1 := e.Group("/v1")
 	schedule.MountAPI(apiv1)
+	swagger.MountSwaggerAPI(e.Group(""))
 }

@@ -1,0 +1,15 @@
+{
+    "apiVersion": "",
+    "apis": [
+        {
+            "path": "/project",
+            "description": "add project"
+        },
+        {
+            "path": "/task",
+            "description": "create task for API testing"
+        }
+    ],
+    "info": {},
+    "swaggerVersion": "1.2"
+}

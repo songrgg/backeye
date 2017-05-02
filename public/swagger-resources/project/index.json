@@ -1,0 +1,144 @@
+{
+    "apiVersion": "",
+    "swaggerVersion": "1.2",
+    "basePath": "{{.}}",
+    "resourcePath": "/project",
+    "apis": [
+        {
+            "path": "/v1/projects",
+            "description": "add project",
+            "operations": [
+                {
+                    "httpMethod": "POST",
+                    "nickname": "project",
+                    "type": "",
+                    "items": {},
+                    "summary": "add project",
+                    "parameters": [
+                        {
+                            "paramType": "body",
+                            "name": "args",
+                            "description": "API testing project",
+                            "dataType": "github.com.songrgg.backeye.model.form.Project",
+                            "type": "github.com.songrgg.backeye.model.form.Project",
+                            "format": "",
+                            "allowMultiple": false,
+                            "required": true,
+                            "minimum": 0,
+                            "maximum": 0
+                        }
+                    ]
+                },
+                {
+                    "httpMethod": "GET",
+                    "nickname": "project",
+                    "type": "",
+                    "items": {},
+                    "summary": "fetch project list"
+                }
+            ]
+        },
+        {
+            "path": "/v1/projects/{id}",
+            "description": "fetch the specified project",
+            "operations": [
+                {
+                    "httpMethod": "GET",
+                    "nickname": "project",
+                    "type": "",
+                    "items": {},
+                    "summary": "fetch the specified project",
+                    "parameters": [
+                        {
+                            "paramType": "path",
+                            "name": "id",
+                            "description": "project id",
+                            "dataType": "int",
+                            "type": "int",
+                            "format": "",
+                            "allowMultiple": false,
+                            "required": true,
+                            "minimum": 0,
+                            "maximum": 0
+                        }
+                    ]
+                },
+                {
+                    "httpMethod": "DELETE",
+                    "nickname": "project",
+                    "type": "",
+                    "items": {},
+                    "summary": "delete the specified project",
+                    "parameters": [
+                        {
+                            "paramType": "path",
+                            "name": "id",
+                            "description": "project id",
+                            "dataType": "int",
+                            "type": "int",
+                            "format": "",
+                            "allowMultiple": false,
+                            "required": true,
+                            "minimum": 0,
+                            "maximum": 0
+                        }
+                    ]
+                },
+                {
+                    "httpMethod": "PUT",
+                    "nickname": "project",
+                    "type": "",
+                    "items": {},
+                    "summary": "update the specified project",
+                    "parameters": [
+                        {
+                            "paramType": "path",
+                            "name": "id",
+                            "description": "project id",
+                            "dataType": "int",
+                            "type": "int",
+                            "format": "",
+                            "allowMultiple": false,
+                            "required": true,
+                            "minimum": 0,
+                            "maximum": 0
+                        },
+                        {
+                            "paramType": "body",
+                            "name": "args",
+                            "description": "API testing project",
+                            "dataType": "github.com.songrgg.backeye.model.form.Project",
+                            "type": "github.com.songrgg.backeye.model.form.Project",
+                            "format": "",
+                            "allowMultiple": false,
+                            "required": true,
+                            "minimum": 0,
+                            "maximum": 0
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "github.com.songrgg.backeye.model.form.Project": {
+            "id": "github.com.songrgg.backeye.model.form.Project",
+            "properties": {
+                "desc": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "name": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                }
+            }
+        }
+    }
+}
