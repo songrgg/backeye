@@ -134,13 +134,13 @@ func parseWatch(w *Watch) watch.Watch {
 }
 
 func parseAssertion(t Assertion) assertion.AssertionFunc {
-	return func(ctx context.Context, resp *nethttp.Response) assertion.AssertionResult {
+	return func(ctx context.Context, resp *nethttp.Response) assertion.Result {
 		body := ctx.Value(watch.ResponseBody)
 
 		v := make(map[string]interface{})
 		err := json.Unmarshal(body.([]byte), &v)
 		if err != nil {
-			return assertion.AssertionResult{
+			return assertion.Result{
 				Success: false,
 				Error:   err,
 			}
@@ -161,7 +161,7 @@ func parseAssertion(t Assertion) assertion.AssertionFunc {
 				left = v[t.Left].(string)
 			}
 		} else {
-			return assertion.AssertionResult{
+			return assertion.Result{
 				Success: false,
 				Error:   errors.New("invalid source"),
 			}
@@ -178,7 +178,7 @@ func parseAssertion(t Assertion) assertion.AssertionFunc {
 			success = left != ""
 			err = errors.New("not empty")
 		}
-		return assertion.AssertionResult{
+		return assertion.Result{
 			Success: success,
 			Error:   err,
 		}

@@ -7,7 +7,8 @@ import (
 // MountAPI registers API
 func MountAPI(group *echo.Group) {
 	mountTaskAPI(group)
-	moutProjectAPI(group)
+	mountProjectAPI(group)
+	mountExecutorAPI(group)
 }
 
 func mountTaskAPI(group *echo.Group) {
@@ -21,11 +22,17 @@ func mountTaskAPI(group *echo.Group) {
 	task.GET("/:id/health", HTTPGetTaskHealth)
 }
 
-func moutProjectAPI(group *echo.Group) {
+func mountProjectAPI(group *echo.Group) {
 	proj := group.Group("/projects")
 	proj.POST("", httpAddProject)
 	proj.GET("", httpGetProjects)
 	proj.GET("/:id", httpGetProject)
 	proj.DELETE("/:id", httpDeleteProject)
 	proj.PUT("/:id", httpUpdateProject)
+}
+
+func mountExecutorAPI(group *echo.Group) {
+	proj := group.Group("/executors")
+	proj.POST("/runtask", HTTPRunTask)
+	proj.POST("/verifytask", HTTPVerifyTask)
 }

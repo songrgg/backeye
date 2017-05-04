@@ -1,5 +1,10 @@
 package form
 
+import (
+	"github.com/songrgg/backeye/model"
+	modelmapper "gopkg.in/jeevatkm/go-model.v0"
+)
+
 type Project struct {
 	Name string `json:"name"`
 	Desc string `json:"desc"`
@@ -39,4 +44,37 @@ type Assertion struct {
 	Operator string `json:"operator"`
 	Left     string `json:"left"`
 	Right    string `json:"right"`
+}
+
+func ParseTask(t *Task) (model.Task, error) {
+	task := model.Task{}
+	modelmapper.Copy(&task, t)
+
+	watches := make([]model.Watch, 0)
+	for i := range t.Watches {
+		watch, _ := ParseWatch(&t.Watches[i])
+		watches = append(watches, watch)
+	}
+	task.Watches = watches
+
+	return task, nil
+}
+
+func ParseWatch(w *Watch) (model.Watch, error) {
+	watch := model.Watch{}
+	modelmapper.Copy(&watch, w)
+
+	assertions := make([]model.Assertion, 0)
+	for i := range w.Assertions {
+		assertion, _ := ParseAssertion(&w.Assertions[i])
+		assertions = append(assertions, assertion)
+	}
+	watch.Assertions = assertions
+	return watch, nil
+}
+
+func ParseAssertion(a *Assertion) (model.Assertion, error) {
+	assertion := model.Assertion{}
+	modelmapper.Copy(&assertion, a)
+	return assertion, nil
 }
