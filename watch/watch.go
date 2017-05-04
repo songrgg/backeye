@@ -25,5 +25,6 @@ type Result struct {
 	WatchName     string             `json:"watch_name"`
 	ExecutionTime time.Time          `json:"execution_time"`
 	ExtractValues map[string]string  `json:"extract_values"`
+	Passed        bool               `json:"passed"`
 	Assertions    []assertion.Result `json:"assertions"`
 }

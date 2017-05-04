@@ -63,6 +63,7 @@ func (w *Watch) Run(ctx context.Context) (watch.Result, error) {
 		TaskID:        taskID,
 		WatchName:     w.Name,
 		ExecutionTime: time.Now(),
+		Passed:        true,
 	}
 
 	var vars map[string]string
@@ -100,7 +101,8 @@ func (w *Watch) Run(ctx context.Context) (watch.Result, error) {
 		assertionResults := make([]assertion.Result, 0)
 		for i, assertion := range w.Assertions {
 			assertionResults = append(assertionResults, assertion(ctx, resp))
-			if !assertionResults[i].Success {
+			if !assertionResults[i].Passed {
+				result.Passed = false
 				break
 			}
 		}

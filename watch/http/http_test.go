@@ -21,7 +21,7 @@ func TestGet(t *testing.T) {
 		Assertions: []assertion.AssertionFunc{
 			func(ctx context.Context, resp *http.Response) assertion.Result {
 				return assertion.Result{
-					Success: resp.StatusCode == 200,
+					Passed: resp.StatusCode == 200,
 				}
 			},
 		},
@@ -30,7 +30,7 @@ func TestGet(t *testing.T) {
 	result, err := watch.Run(context.Background())
 	assert.Equal(t, err, nil)
 	assert.Equal(t, len(result.Assertions), 1)
-	assert.Equal(t, result.Assertions[0].Success, true)
+	assert.Equal(t, result.Assertions[0].Passed, true)
 }
 
 func TestMultipleWatch(t *testing.T) {
@@ -41,12 +41,12 @@ func TestMultipleWatch(t *testing.T) {
 		Assertions: []assertion.AssertionFunc{
 			func(ctx context.Context, resp *http.Response) assertion.Result {
 				return assertion.Result{
-					Success: resp.StatusCode == 200,
+					Passed: resp.StatusCode == 200,
 				}
 			},
 			func(ctx context.Context, resp *http.Response) assertion.Result {
 				return assertion.Result{
-					Success: resp.Status == "200 OK",
+					Passed: resp.Status == "200 OK",
 				}
 			},
 		},
@@ -55,8 +55,8 @@ func TestMultipleWatch(t *testing.T) {
 	result, err := watch.Run(context.Background())
 	assert.Equal(t, err, nil)
 	assert.Equal(t, len(result.Assertions), 2)
-	assert.Equal(t, result.Assertions[0].Success, true)
-	assert.Equal(t, result.Assertions[1].Success, true)
+	assert.Equal(t, result.Assertions[0].Passed, true)
+	assert.Equal(t, result.Assertions[1].Passed, true)
 }
 
 func TestPathRender(t *testing.T) {

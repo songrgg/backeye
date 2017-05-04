@@ -21,7 +21,7 @@ func HTTPRunTask(ctx echo.Context) error {
 		return helper.ErrorResponse(ctx, err)
 	}
 
-	// TODO execute the task once
+	// execute the task once
 	taskModel, err := form.ParseTask(args)
 	if err != nil {
 		std.LogErrorc("echo", err, "failed to parse task")
@@ -32,8 +32,6 @@ func HTTPRunTask(ctx echo.Context) error {
 		std.LogErrorc("echo", err, "failed to run task")
 		return helper.ErrorResponse(ctx, err)
 	}
-
-	std.LogDebugLn("echo", results)
 
 	return helper.SuccessResponse(ctx, results)
 }

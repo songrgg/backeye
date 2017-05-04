@@ -9,7 +9,7 @@ import (
 // Result records the assertion's result
 type Result struct {
 	AssertionID       int64         `json:"assertion_id"`
-	Success           bool          `json:"success"`
+	Passed            bool          `json:"passed"`
 	Error             error         `json:"error"`
 	ExecutionDuration time.Duration `json:"execution_duration"`
 }

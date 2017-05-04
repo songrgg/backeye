@@ -141,8 +141,8 @@ func parseAssertion(t Assertion) assertion.AssertionFunc {
 		err := json.Unmarshal(body.([]byte), &v)
 		if err != nil {
 			return assertion.Result{
-				Success: false,
-				Error:   err,
+				Passed: false,
+				Error:  err,
 			}
 		}
 
@@ -162,25 +162,25 @@ func parseAssertion(t Assertion) assertion.AssertionFunc {
 			}
 		} else {
 			return assertion.Result{
-				Success: false,
-				Error:   errors.New("invalid source"),
+				Passed: false,
+				Error:  errors.New("invalid source"),
 			}
 		}
 
 		right := t.Right
 
-		success := false
+		passed := false
 
 		if t.Operator == "equal" {
-			success = left == right
+			passed = left == right
 			err = errors.New("not equal")
 		} else if t.Operator == "not_empty" {
-			success = left != ""
+			passed = left != ""
 			err = errors.New("not empty")
 		}
 		return assertion.Result{
-			Success: success,
-			Error:   err,
+			Passed: passed,
+			Error:  err,
 		}
 	}
 }
