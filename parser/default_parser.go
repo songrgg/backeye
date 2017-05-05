@@ -97,16 +97,16 @@ func (p *DefaultParser) parseVariable(t *model.Variable) (watch.Variable, error)
 }
 
 func (p *DefaultParser) parseAssertion(t *model.Assertion) assertion.AssertionFunc {
-	return func(ctx context.Context, resp *nethttp.Response) assertion.AssertionResult {
+	return func(ctx context.Context, resp *nethttp.Response) assertion.Result {
 		start := time.Now()
 		body := ctx.Value(watch.ResponseBody)
 
 		v := make(map[string]interface{})
 		err := json.Unmarshal(body.([]byte), &v)
 		if err != nil {
-			return assertion.AssertionResult{
-				Success: false,
-				Error:   err,
+			return assertion.Result{
+				Passed: false,
+				Error:  err,
 			}
 		}
 
@@ -125,27 +125,27 @@ func (p *DefaultParser) parseAssertion(t *model.Assertion) assertion.AssertionFu
 				left = v[t.Left].(string)
 			}
 		} else {
-			return assertion.AssertionResult{
-				Success: false,
-				Error:   errors.New("invalid source"),
+			return assertion.Result{
+				Passed: false,
+				Error:  errors.New("invalid source"),
 			}
 		}
 
 		right := t.Right
 
-		success := false
+		passed := false
 
 		if t.Operator == "equal" {
-			success = left == right
+			passed = left == right
 			err = errors.New("not equal")
 		} else if t.Operator == "not_empty" {
-			success = left != ""
+			passed = left != ""
 			err = errors.New("not empty")
 		}
-		return assertion.AssertionResult{
+		return assertion.Result{
 			AssertionID:       t.ID,
 			ExecutionDuration: time.Since(start),
-			Success:           success,
+			Passed:            passed,
 			Error:             err,
 		}
 	}

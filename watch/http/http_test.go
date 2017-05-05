@@ -19,9 +19,9 @@ func TestGet(t *testing.T) {
 		Path:    "https://api-prod.wallstreetcn.com/apiv1/content/articles",
 		Timeout: time.Second,
 		Assertions: []assertion.AssertionFunc{
-			func(ctx context.Context, resp *http.Response) assertion.AssertionResult {
-				return assertion.AssertionResult{
-					Success: resp.StatusCode == 200,
+			func(ctx context.Context, resp *http.Response) assertion.Result {
+				return assertion.Result{
+					Passed: resp.StatusCode == 200,
 				}
 			},
 		},
@@ -29,10 +29,8 @@ func TestGet(t *testing.T) {
 
 	result, err := watch.Run(context.Background())
 	assert.Equal(t, err, nil)
-	assert.NotEqual(t, result.Response, nil)
-	assert.Equal(t, result.Response.StatusCode, 200)
 	assert.Equal(t, len(result.Assertions), 1)
-	assert.Equal(t, result.Assertions[0].Success, true)
+	assert.Equal(t, result.Assertions[0].Passed, true)
 }
 
 func TestMultipleWatch(t *testing.T) {
@@ -41,14 +39,14 @@ func TestMultipleWatch(t *testing.T) {
 		Path:    "https://api-prod.wallstreetcn.com/apiv1/content/articles",
 		Timeout: time.Second,
 		Assertions: []assertion.AssertionFunc{
-			func(ctx context.Context, resp *http.Response) assertion.AssertionResult {
-				return assertion.AssertionResult{
-					Success: resp.StatusCode == 200,
+			func(ctx context.Context, resp *http.Response) assertion.Result {
+				return assertion.Result{
+					Passed: resp.StatusCode == 200,
 				}
 			},
-			func(ctx context.Context, resp *http.Response) assertion.AssertionResult {
-				return assertion.AssertionResult{
-					Success: resp.Status == "200 OK",
+			func(ctx context.Context, resp *http.Response) assertion.Result {
+				return assertion.Result{
+					Passed: resp.Status == "200 OK",
 				}
 			},
 		},
@@ -56,11 +54,9 @@ func TestMultipleWatch(t *testing.T) {
 
 	result, err := watch.Run(context.Background())
 	assert.Equal(t, err, nil)
-	assert.NotEqual(t, result.Response, nil)
-	assert.Equal(t, result.Response.StatusCode, 200)
 	assert.Equal(t, len(result.Assertions), 2)
-	assert.Equal(t, result.Assertions[0].Success, true)
-	assert.Equal(t, result.Assertions[1].Success, true)
+	assert.Equal(t, result.Assertions[0].Passed, true)
+	assert.Equal(t, result.Assertions[1].Passed, true)
 }
 
 func TestPathRender(t *testing.T) {

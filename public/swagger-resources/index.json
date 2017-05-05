@@ -2,6 +2,10 @@
     "apiVersion": "",
     "apis": [
         {
+            "path": "/executor",
+            "description": "run task for API testing"
+        },
+        {
             "path": "/project",
             "description": "add project"
         },

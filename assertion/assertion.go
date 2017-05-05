@@ -6,13 +6,13 @@ import (
 	"time"
 )
 
-// AssertionResult records the assertion's result
-type AssertionResult struct {
-	AssertionID       int64
-	Success           bool
-	Error             error
-	ExecutionDuration time.Duration
+// Result records the assertion's result
+type Result struct {
+	AssertionID       int64         `json:"assertion_id"`
+	Passed            bool          `json:"passed"`
+	Error             error         `json:"error"`
+	ExecutionDuration time.Duration `json:"execution_duration"`
 }
 
 // AssertionFunc indicates the assertion
-type AssertionFunc func(context.Context, *nethttp.Response) AssertionResult
+type AssertionFunc func(context.Context, *nethttp.Response) Result

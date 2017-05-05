@@ -129,27 +129,3 @@ func getWatchResults(ctx echo.Context, taskName string, watchName string) []mode
 	}
 	return results
 }
-
-// func getTaskHealth(ctx echo.Context, taskName string) *model.TaskHealth {
-// 	maxID := std.FetchStrParam(ctx, "maxID", "")
-// 	limit := std.FetchIntParam(ctx, "limit", 10)
-// 	results, err := dao.AllWatchResults(taskName, maxID, limit)
-// 	if err != nil {
-// 		return nil
-// 	}
-
-// 	total := 0
-// 	success := 0
-// 	for _, result := range results {
-// 		for _, assertion := range result.Assertions {
-// 			if assertion.Success {
-// 				success++
-// 			}
-// 			total++
-// 		}
-// 	}
-// 	return &model.TaskHealth{
-// 		Total:   total,
-// 		Success: success,
-// 	}
-// }

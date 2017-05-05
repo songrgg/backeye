@@ -44,7 +44,7 @@ func watchResults() {
 				}
 
 				status := "failed"
-				if as.Success == true {
+				if as.Passed == true {
 					status = "success"
 				} else {
 					resultStatus = "failed"

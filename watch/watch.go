@@ -2,7 +2,6 @@ package watch
 
 import (
 	"context"
-	nethttp "net/http"
 	"time"
 
 	"github.com/songrgg/backeye/assertion"
@@ -21,11 +20,11 @@ type Watch interface {
 
 // Result indicates the watch's result
 type Result struct {
-	TaskID        int64
-	TaskName      string
-	WatchName     string
-	ExecutionTime time.Time
-	ExtractValues map[string]string
-	Response      *nethttp.Response
-	Assertions    []assertion.AssertionResult
+	TaskID        int64              `json:"task_id"`
+	TaskName      string             `json:"task_name"`
+	WatchName     string             `json:"watch_name"`
+	ExecutionTime time.Time          `json:"execution_time"`
+	ExtractValues map[string]string  `json:"extract_values"`
+	Passed        bool               `json:"passed"`
+	Assertions    []assertion.Result `json:"assertions"`
 }

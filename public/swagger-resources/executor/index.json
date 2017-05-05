@@ -1,0 +1,285 @@
+{
+    "apiVersion": "",
+    "swaggerVersion": "1.2",
+    "basePath": "{{.}}",
+    "resourcePath": "/executor",
+    "apis": [
+        {
+            "path": "/v1/executors/runtask/{id}",
+            "description": "run task for API testing",
+            "operations": [
+                {
+                    "httpMethod": "POST",
+                    "nickname": "executor",
+                    "type": "",
+                    "items": {},
+                    "summary": "run task for API testing",
+                    "parameters": [
+                        {
+                            "paramType": "path",
+                            "name": "id",
+                            "description": "task id",
+                            "dataType": "int",
+                            "type": "int",
+                            "format": "",
+                            "allowMultiple": false,
+                            "required": true,
+                            "minimum": 0,
+                            "maximum": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/executors/runtask",
+            "description": "run task for API testing",
+            "operations": [
+                {
+                    "httpMethod": "POST",
+                    "nickname": "executor",
+                    "type": "",
+                    "items": {},
+                    "summary": "run task for API testing",
+                    "parameters": [
+                        {
+                            "paramType": "body",
+                            "name": "args",
+                            "description": "API testing task",
+                            "dataType": "github.com.songrgg.backeye.model.form.Task",
+                            "type": "github.com.songrgg.backeye.model.form.Task",
+                            "format": "",
+                            "allowMultiple": false,
+                            "required": true,
+                            "minimum": 0,
+                            "maximum": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/v1/executors/verifytask",
+            "description": "run task for API testing",
+            "operations": [
+                {
+                    "httpMethod": "POST",
+                    "nickname": "executor",
+                    "type": "",
+                    "items": {},
+                    "summary": "run task for API testing",
+                    "parameters": [
+                        {
+                            "paramType": "body",
+                            "name": "args",
+                            "description": "API testing task",
+                            "dataType": "github.com.songrgg.backeye.model.form.Task",
+                            "type": "github.com.songrgg.backeye.model.form.Task",
+                            "format": "",
+                            "allowMultiple": false,
+                            "required": true,
+                            "minimum": 0,
+                            "maximum": 0
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "models": {
+        "github.com.songrgg.backeye.model.form.Assertion": {
+            "id": "github.com.songrgg.backeye.model.form.Assertion",
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "left": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "operator": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "right": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "source": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "timeout": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "type": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                }
+            }
+        },
+        "github.com.songrgg.backeye.model.form.Task": {
+            "id": "github.com.songrgg.backeye.model.form.Task",
+            "properties": {
+                "cron": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "desc": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "name": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "project_id": {
+                    "type": "integer",
+                    "description": "",
+                    "items": {},
+                    "format": "int64",
+                    "defaultValue": 0
+                },
+                "status": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "type": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "variables": {
+                    "type": "array",
+                    "description": "",
+                    "items": {
+                        "$ref": "github.com.songrgg.backeye.model.form.Variable"
+                    },
+                    "format": ""
+                },
+                "watches": {
+                    "type": "array",
+                    "description": "",
+                    "items": {
+                        "$ref": "github.com.songrgg.backeye.model.form.Watch"
+                    },
+                    "format": ""
+                }
+            }
+        },
+        "github.com.songrgg.backeye.model.form.Variable": {
+            "id": "github.com.songrgg.backeye.model.form.Variable",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "value": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                }
+            }
+        },
+        "github.com.songrgg.backeye.model.form.Watch": {
+            "id": "github.com.songrgg.backeye.model.form.Watch",
+            "properties": {
+                "assertions": {
+                    "type": "array",
+                    "description": "",
+                    "items": {
+                        "$ref": "github.com.songrgg.backeye.model.form.Assertion"
+                    },
+                    "format": ""
+                },
+                "desc": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "headers": {
+                    "type": "array",
+                    "description": "",
+                    "items": {
+                        "type": "string"
+                    },
+                    "format": "",
+                    "defaultValue": [
+                        ""
+                    ]
+                },
+                "interval": {
+                    "type": "int32",
+                    "description": "",
+                    "items": {},
+                    "format": ""
+                },
+                "method": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "name": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                },
+                "path": {
+                    "type": "string",
+                    "description": "",
+                    "items": {},
+                    "format": "",
+                    "defaultValue": ""
+                }
+            }
+        }
+    }
+}

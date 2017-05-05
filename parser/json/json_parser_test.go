@@ -58,8 +58,8 @@ func TestRunSuccess(t *testing.T) {
 	watchResults, err := task.Run(context.Background())
 	assert.Nil(t, err)
 	assert.Len(t, watchResults[0].Assertions, 2)
-	assert.True(t, watchResults[0].Assertions[0].Success)
-	assert.True(t, watchResults[0].Assertions[1].Success)
+	assert.True(t, watchResults[0].Assertions[0].Passed)
+	assert.True(t, watchResults[0].Assertions[1].Passed)
 }
 
 func TestRunFailure(t *testing.T) {
@@ -79,8 +79,8 @@ func TestRunFailure(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Len(t, watchResults, 1)
 	assert.Len(t, watchResults[0].Assertions, 2)
-	assert.True(t, watchResults[0].Assertions[0].Success)
-	assert.False(t, watchResults[0].Assertions[1].Success)
+	assert.True(t, watchResults[0].Assertions[0].Passed)
+	assert.False(t, watchResults[0].Assertions[1].Passed)
 }
 
 func TestRunMultipleAssertions(t *testing.T) {
@@ -100,7 +100,7 @@ func TestRunMultipleAssertions(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Len(t, watchResults, 1)
 	assert.Len(t, watchResults[0].Assertions, 3)
-	assert.True(t, watchResults[0].Assertions[0].Success)
-	assert.True(t, watchResults[0].Assertions[1].Success)
-	assert.True(t, watchResults[0].Assertions[2].Success)
+	assert.True(t, watchResults[0].Assertions[0].Passed)
+	assert.True(t, watchResults[0].Assertions[1].Passed)
+	assert.True(t, watchResults[0].Assertions[2].Passed)
 }

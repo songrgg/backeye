@@ -21,7 +21,7 @@ type Task struct {
 	Status    string  `gorm:"type:varchar(64)" json:"status"`
 	Desc      string  `gorm:"type:varchar(1024)" json:"desc"`
 	CronSpec  string  `gorm:"type:varchar(256)" json:"cron_spec"`
-	Watches   []Watch `gorm:"ForeignKey:TaskID" json:"watches,omitempty"`
+	Watches   []Watch `gorm:"ForeignKey:TaskID;AssociationForeignKey:TaskID" json:"watches,omitempty"`
 	std.TimeMixin
 }
 
@@ -36,8 +36,8 @@ type Watch struct {
 	Path       string      `gorm:"type:varchar(512)" json:"path"`
 	Method     string      `gorm:"type:varchar(512)" json:"method"`
 	Headers    string      `gorm:"type:longtext" json:"headers"`
-	Assertions []Assertion `gorm:"ForeignKey:WatchID" json:"assertions"`
-	Variables  []Variable  `gorm:"ForeignKey:WatchID" json:"variables"`
+	Assertions []Assertion `gorm:"ForeignKey:WatchID;AssociationForeignKey:ID" json:"assertions"`
+	Variables  []Variable  `gorm:"ForeignKey:WatchID;AssociationForeignKey:ID" json:"variables"`
 	std.TimeMixin
 }
 

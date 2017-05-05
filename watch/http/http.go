@@ -63,6 +63,7 @@ func (w *Watch) Run(ctx context.Context) (watch.Result, error) {
 		TaskID:        taskID,
 		WatchName:     w.Name,
 		ExecutionTime: time.Now(),
+		Passed:        true,
 	}
 
 	var vars map[string]string
@@ -97,14 +98,14 @@ func (w *Watch) Run(ctx context.Context) (watch.Result, error) {
 
 		ctx = context.WithValue(ctx, watch.ResponseBody, body)
 
-		assertionResults := make([]assertion.AssertionResult, 0)
+		assertionResults := make([]assertion.Result, 0)
 		for i, assertion := range w.Assertions {
 			assertionResults = append(assertionResults, assertion(ctx, resp))
-			if !assertionResults[i].Success {
+			if !assertionResults[i].Passed {
+				result.Passed = false
 				break
 			}
 		}
-		result.Response = resp
 		result.Assertions = assertionResults
 		result.ExtractValues = newvars
 		return result, nil
@@ -122,11 +123,9 @@ func initVM(body []byte) *otto.Otto {
 	vm := otto.New()
 	vm.Set("$RESPONSE_RAW", string(body))
 	vm.Run(`$RESPONSE_JSON = JSON.parse($RESPONSE_RAW)`)
-	j, err := vm.Run(`JSON.parse($RESPONSE_RAW)`)
+	_, err := vm.Run(`JSON.parse($RESPONSE_RAW)`)
 	if err != nil {
 		std.LogErrorc("watch", err, "failed to parse response json")
-	} else {
-		std.LogDebugLn("respnse json is: ", j)
 	}
 	return vm
 }
