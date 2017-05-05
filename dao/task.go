@@ -117,6 +117,8 @@ func GetTask(id int64) (*model.Task, error) {
 	if err := db.Error; err != nil {
 		return nil, err
 	}
+
+	assembleTask(model.DB(), &task)
 	return &task, nil
 }
 

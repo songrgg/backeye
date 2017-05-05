@@ -68,9 +68,9 @@ func (sch *Scheduler) LoadTasks(tasks []model.Task) error {
 }
 
 // RunTask execute the task synchronously
-func RunTask(task model.Task) ([]watch.Result, error) {
+func RunTask(task *model.Task) ([]watch.Result, error) {
 	parser := parser.DefaultParser{}
-	t2, err := parser.Translate(&task)
+	t2, err := parser.Translate(task)
 	if err != nil {
 		return nil, err
 	}

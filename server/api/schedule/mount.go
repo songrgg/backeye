@@ -34,5 +34,6 @@ func mountProjectAPI(group *echo.Group) {
 func mountExecutorAPI(group *echo.Group) {
 	proj := group.Group("/executors")
 	proj.POST("/runtask", HTTPRunTask)
+	proj.POST("/runtask/:id", HTTPRunTaskByID)
 	proj.POST("/verifytask", HTTPVerifyTask)
 }

@@ -5,6 +5,33 @@
     "resourcePath": "/executor",
     "apis": [
         {
+            "path": "/v1/executors/runtask/{id}",
+            "description": "run task for API testing",
+            "operations": [
+                {
+                    "httpMethod": "POST",
+                    "nickname": "executor",
+                    "type": "",
+                    "items": {},
+                    "summary": "run task for API testing",
+                    "parameters": [
+                        {
+                            "paramType": "path",
+                            "name": "id",
+                            "description": "task id",
+                            "dataType": "int",
+                            "type": "int",
+                            "format": "",
+                            "allowMultiple": false,
+                            "required": true,
+                            "minimum": 0,
+                            "maximum": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "path": "/v1/executors/runtask",
             "description": "run task for API testing",
             "operations": [
