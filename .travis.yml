@@ -12,6 +12,7 @@ go:
 env:
   global:
     - GORACE="halt_on_error=1"
+    - REPO="songrgg/backeye"
     - secure: "Str+uOxHP0jJAv8bZ11wMYrBd+ZT1RwCsLHhHieSPa6AWQeKx7ElXCPz2eWCn/5MEfMs0XTBWOjXqNnPVkpinfN1Fkf7QkYl3mNwRLqQtbouZJ8PmHSstaYelc+1XecsVVG4c3QMyLI7q67tizhsv62zSQkILg0NVcRPEsAjzROCJdX5x39IjXlrL4IncFiAeLeURcAwzLVtE03e0z31+8Qx98rReOWJ9d0D8jwOYDR+r0O1KPVwQkW6/g2gwThbCbAnNSyBuEGW63n4emxC47uUI3Dyqt79i1Go66/A0IidIuDhl07Q8b8vq1BXu1j/5qA/e2T2kkx8VQIIXq63listrg0CF44vq86WlFrC6n8ATajfAWJge+m17w52GChC0mle4mCVwlDIHNqL2Kz6nEkQAPV3gGMFsZR/rZD6ab/9r4p41sIERaLX9VVag6+2NDPRnf18pkwMmWFoYzkQ5IukDT/PcJRpXnK50pBdO/84TKiSsrgJCfSgiSy9wozickEdLG/HvjGowkgWJ4tbQv9RAioNlJSa7KaniIlzOOye6O+WVtWIRc248szAKBHLcYIxntRltuVTYcY0bvu0BNtMf3i+kIPDlcku6r1TkNqbdvpjfIipdIhEcSXusqv5kJFpsPfSjsyZR3GaPKvuRnMk1CS7IFEUJzTgvaFnfIw=" # Docker Email
     - secure: "SGAAKuMSKrzPHTZig6Ed6h3c7PJzN1hJsLoySDVyR+xeWBOPJ0y481pU9lXYh/7UgmJh3kMGwG7lbmZJ4pxeDAVq3lMmKpnXlkvxYFJqZDNy+l/RLpD2OXOz3H4zKPQW0IkJ6QNQ9nO8BsRqlJvoMtP46BG8FmP4UDMDwHgJwT63EjdTr4jFbcnA93sSDasPQax7e6LS7gPGQeIT/VDLI0/kTMD+reZ8WA8z+R24OdcStsCB/qP5z5qNrmPsGGiLIg/wPeiDnshTaIgScOzW7oalqfUICF5zapNjp2HgSxbFpXljYENyK2Q2m3ati1ES97OsHUDJTNTF9KqG8CiqRJAt5058I+UnXv9BnySYbhzoZXBUykdFyONI4Ed/pKXxr3qB3hHP/vtlEckNLixSY13vj/SNe3bzhgzsu+wgLT1EAbo69u8OC1/KmxOlEZGUbGspbUUb/VZpuRg+O9//B1+kyj7yZ+0Iws60fBZ1xDIlRKkIchYxpAh2IdeDJWLudK0lNUyACTZj+/SITVc/O5YPRg0cK22FEKAyHpWlXyRW4thl0BTVuqEWijsUlZfueR238+KPXYGEQpqksBiQuzG2KP4RWIYBueXDH8rs3wCHibIpkojYQ/0BIdVdWzsznaHnAtBr+VHOPmRjPU2PdbqM5GZ0/CYFbGXktTOzRk8=" # Docker User
     - secure: "K/4Nyw7mW+kaXSewEb8eUaK7tO+w7DVBk1ccqalvObDTHR6KSmcLt8M26DSt4Tizff1vYQyD6i/MuH3MbBUIpO82NF25EC358g7rilXachafn8EAy5GBtro7Tkdpjchj6CAXww2HzfzdC+S61V+SthMSvKdDU79PUTM+Fa3hkp/B7jBXJaPb3OYC8KtaWF3qccc4kpFlgpQbhhwnneZElZLiMkV2ncDv1ULRCPeAvlt8p56MYdHqNdOl7flBR82CiPaSqps9dfYbd+l+b4ROz9DZxZZ8o+FauXaAxMqH7P+ruH8Iv4kddgQrIF2wel+hei+DDcqKI3dqJpyT+Ha1rxTcLsTDuCGQGjCs7XDUZa7Tmr2FquORgxM/Lx0tpi0uiNxHgw59hziA/mK8p7buabCBvoJWoDEcn+bnLyhH2rutw9MCS14ODkYCua3YCYB9UO0ta4VEZEIHE7QWNnA16xbo7qq2tiS5NAPB10ab4dt0lBJcEENt+TJMRKZI2R0YHuOyrqrDz0M8sa2jhYCddQ/FU4IAakYMj8itF60juy9EiidINq96ZRAyFnOBOhCiz3AxWmogtEC8oQ+kzQNKx/WWqS130OPwRkMlKPB2MT9LAStNT/sIsBXEoO6JhWV8Z/IUobQSnFxIP66rcENDDFlQyFe95ps827nDtZP+ET4=" # Docker Password
@@ -26,7 +27,6 @@ script:
 after_success:
   - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-w' -o server ./main.go
   - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-  - export REPO="songrgg/backeye"
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
   - docker build -t $REPO:$COMMIT .
   - docker tag $REPO:$COMMIT $REPO:$TAG
