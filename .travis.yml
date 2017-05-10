@@ -25,8 +25,8 @@ after_success:
   - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-w' -o server ./main.go
   - docker login -u songrgg -p $DOCKER_PASS
   - export REPO=songrgg/backeye
-  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
-  - docker build -t $REPO:$COMMIT .
-  - docker tag $REPO:$COMMIT $REPO:$TAG
-  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
-  - docker push $REPO
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo "temp" ; fi`
+  - docker build -t "$REPO:$COMMIT" .
+  - docker tag "$REPO:$COMMIT" "$REPO:$TAG"
+  - docker tag "$REPO:$COMMIT" "$REPO:travis-$TRAVIS_BUILD_NUMBER"
+  - docker push "$REPO"
