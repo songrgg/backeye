@@ -5,7 +5,6 @@ import (
 	"runtime/debug"
 
 	"github.com/Sirupsen/logrus"
-	"github.com/songrgg/backeye/common"
 )
 
 // LogFields indicates the log's tags
@@ -51,7 +50,7 @@ const (
 )
 
 // InitLog initializes the logger
-func InitLog(conf common.ConfigLog) {
+func InitLog(conf ConfigLog) {
 	logrus.SetLevel(logrus.Level(conf.Level))
 	// logrus.SetFormatter(&logrus.JSONFormatter{})
 }

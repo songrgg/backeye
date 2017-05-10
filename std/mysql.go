@@ -10,11 +10,10 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/songrgg/backeye/common"
 )
 
 // CreateDB 初始化MYSQL实例
-func CreateDB(config common.ConfigMySQL) *gorm.DB {
+func CreateDB(config ConfigMySQL) *gorm.DB {
 	var (
 		username = config.Username
 		password = config.Password

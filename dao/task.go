@@ -10,8 +10,8 @@ import (
 	"time"
 )
 
-// NewTask2 creates a new task
-func NewTask2(f *form.Task) error {
+// NewTask creates a new task
+func NewTask(f *form.Task) error {
 	nowTime := time.Now()
 	task := model.Task{
 		TimeMixin: std.TimeMixin{

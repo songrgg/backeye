@@ -22,7 +22,7 @@ func HTTPAddTask(ctx echo.Context) error {
 		return helper.ErrorResponse(ctx, err)
 	}
 
-	err := dao.NewTask2(args)
+	err := dao.NewTask(args)
 	if err != nil {
 		std.LogErrorc("backeye", err, "failed to create task")
 		return helper.ErrorResponse(ctx, err)
