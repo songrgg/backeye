@@ -140,3 +140,28 @@ Access [http://localhost:9876/swagger-ui/index.html](http://localhost:9876/swagg
     ]
 }
 ```
+
+### Run With Docker
+
+Get the configuration ready, for example in the test environment  
+**backeye.test.yaml**
+```yaml
+bind: ":9876"
+
+log:
+  level: 5
+
+mysql:
+    username: "<MYSQL_USERNAME>"
+    password: "<MYSQL_PASSWORD>"
+    host: "<MYSQL_HOST>"
+    port: 3306
+    db_name: "backeye"
+    max_idle: 50
+    max_conn: 100
+```
+
+Start the backeye with docker, set `CONFIGOR_ENV` to `test` and mount the configuration file.
+```shell
+docker run -d -e CONFIGOR_ENV=test -v backeye.test.yaml:/usr/src/app/conf/backeye.test.yaml songrgg/backeye
+```

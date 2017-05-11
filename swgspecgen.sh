@@ -9,7 +9,7 @@ go get -u gitlab.wallstcn.com/opensource/goswgspecgen
 # git clone git@gitlab.wallstcn.com:opensource/goswgspecgen.git /opt/go/src/gitlab.wallstcn.com/opensource/oswgspecgen
 
 goswgspecgen \
--apiPackage="github.com/songrgg/backeye/server/api" \
+-apiPackage="github.com/songrgg/backeye/service/api" \
 -mainApiFile="$dir/main.go" \
 -output="$dir/public/swagger-resources" \
 -format="swagger"

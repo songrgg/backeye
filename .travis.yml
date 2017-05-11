@@ -1,4 +1,7 @@
-sudo: false
+sudo: required
+services:
+  - docker
+
 language: go
 
 go:
@@ -9,11 +12,21 @@ go:
 env:
   global:
     - GORACE="halt_on_error=1"
+    - secure: "K/4Nyw7mW+kaXSewEb8eUaK7tO+w7DVBk1ccqalvObDTHR6KSmcLt8M26DSt4Tizff1vYQyD6i/MuH3MbBUIpO82NF25EC358g7rilXachafn8EAy5GBtro7Tkdpjchj6CAXww2HzfzdC+S61V+SthMSvKdDU79PUTM+Fa3hkp/B7jBXJaPb3OYC8KtaWF3qccc4kpFlgpQbhhwnneZElZLiMkV2ncDv1ULRCPeAvlt8p56MYdHqNdOl7flBR82CiPaSqps9dfYbd+l+b4ROz9DZxZZ8o+FauXaAxMqH7P+ruH8Iv4kddgQrIF2wel+hei+DDcqKI3dqJpyT+Ha1rxTcLsTDuCGQGjCs7XDUZa7Tmr2FquORgxM/Lx0tpi0uiNxHgw59hziA/mK8p7buabCBvoJWoDEcn+bnLyhH2rutw9MCS14ODkYCua3YCYB9UO0ta4VEZEIHE7QWNnA16xbo7qq2tiS5NAPB10ab4dt0lBJcEENt+TJMRKZI2R0YHuOyrqrDz0M8sa2jhYCddQ/FU4IAakYMj8itF60juy9EiidINq96ZRAyFnOBOhCiz3AxWmogtEC8oQ+kzQNKx/WWqS130OPwRkMlKPB2MT9LAStNT/sIsBXEoO6JhWV8Z/IUobQSnFxIP66rcENDDFlQyFe95ps827nDtZP+ET4=" # Docker Password
+    - COMMIT=${TRAVIS_COMMIT::8}
 
 install:
   - go get -t -v ./...
   - go get github.com/mattn/goveralls
 
 script:
-  # - go test ./... -race
   - goveralls -service travis-ci
+
+after_success:
+  - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-w' -o server ./main.go
+  - docker login -u songrgg -p $DOCKER_PASS
+  - export REPO=songrgg/backeye
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo "$COMMIT" ; fi`
+  - docker build -t "$REPO:$COMMIT" .
+  - docker tag "$REPO:$COMMIT" "$REPO:$TAG"
+  - docker push "$REPO"

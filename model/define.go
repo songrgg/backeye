@@ -2,7 +2,6 @@ package model
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/songrgg/backeye/common"
 	"github.com/songrgg/backeye/std"
 )
 
@@ -11,7 +10,7 @@ var (
 )
 
 // InitModel initialize the MySQL
-func InitModel(config common.ConfigMySQL) {
+func InitModel(config std.ConfigMySQL) {
 	db = std.CreateDB(config)
 	std.LogInfoLn("start init mysql model")
 
