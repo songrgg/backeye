@@ -163,5 +163,5 @@ mysql:
 
 Start the backeye with docker, set `CONFIGOR_ENV` to `test` and mount the configuration file.
 ```shell
-docker run -d -e CONFIGOR_ENV=test -v backeye.test.yaml:/usr/src/app/conf/backeye.test.yaml songrgg/backeye
+docker run -d -e CONFIGOR_ENV=test -v conf:/usr/src/app/conf songrgg/backeye
 ```
