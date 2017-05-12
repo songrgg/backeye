@@ -9,4 +9,4 @@ ADD server .
 ADD conf/ conf
 ADD public/ public
 EXPOSE 9876
-ENTRYPOINT ["/server"]
+ENTRYPOINT ["./server"]
