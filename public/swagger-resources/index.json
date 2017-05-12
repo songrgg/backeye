@@ -1,5 +1,5 @@
 {
-    "apiVersion": "",
+    "apiVersion": "1.0.0",
     "apis": [
         {
             "path": "/executor",
@@ -14,6 +14,12 @@
             "description": "create task for API testing"
         }
     ],
-    "info": {},
+    "info": {
+        "title": "Backeye",
+        "description": "Backeye usually works as expected.",
+        "contact": "songrgg0.0@gmail.com",
+        "termsOfServiceUrl": "http://google.com/",
+        "license": "MIT"
+    },
     "swaggerVersion": "1.2"
 }

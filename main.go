@@ -1,3 +1,10 @@
+// @APIVersion 1.0.0
+// @APITitle Backeye
+// @APIDescription Backeye usually works as expected.
+// @Contact songrgg0.0@gmail.com
+// @TermsOfServiceUrl http://google.com/
+// @License MIT
+// @BasePath /
 package main
 
 import (
