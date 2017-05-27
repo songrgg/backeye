@@ -1,8 +1,8 @@
 Backeye
 ========
-[![Build Status](https://travis-ci.org/songrgg/backeye.png?branch=master)](https://travis-ci.org/songrgg/backeye)
+[![Build Status](https://travis-ci.org/songrgg/backeye.svg?branch=master)](https://travis-ci.org/songrgg/backeye)
 [![Go Report Card](https://goreportcard.com/badge/github.com/songrgg/backeye?refresh=1)](https://goreportcard.com/report/github.com/songrgg/backeye)
-[![Coverage Status](https://coveralls.io/repos/github/songrgg/backeye/badge.svg?branch=feature%2Fmultiple-watches)](https://coveralls.io/github/songrgg/backeye?branch=feature%2Fmultiple-watches)
+[![Coverage Status](https://coveralls.io/repos/github/songrgg/backeye/badge.svg?branch=master)](https://coveralls.io/github/songrgg/backeye?branch=master)
 
 Another API accuracy monitor tool.
 
