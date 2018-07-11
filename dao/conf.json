@@ -1,13 +1,27 @@
 {
-    "name": "Post API",
-    "desc": "post API",
-    "cron": "*/2 * * * *",
-    "watchers": [
+    "task": {
+        "path": "https://api-prod.wallstreetcn.com/apiv1/content/articles",
+        "method": "get"
+    },
+    "assertions": [
         {
-            "name": "post list",
-            "desc": "post list",
-            "type": "http",
-            "conf": ""
+            "source": "status",
+            "operator": "equal",
+            "value": 200
+        },
+        {
+            "source": "body",
+            "operator": "equal",
+            "key": "code",
+            "value": 20000,
+            "sourceEncoding": "json"
+        }
+    ],
+    "variables": [
+        {
+            "source": "body",
+            "key": "code",
+            "sourceEncoding": "json"
         }
     ]
 }

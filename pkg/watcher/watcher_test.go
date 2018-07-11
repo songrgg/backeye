@@ -47,16 +47,14 @@ func TestWatcher(t *testing.T) {
 
 func TestNewWatcher(t *testing.T) {
 	conf := `
-{
-    	"points": [
-        	{
-            	"name": "post list",
-            	"desc": "post list",
-            	"type": "http",
-            	"conf": "\n{\n    \"task\": {\n        \"path\": \"https://api-prod.wallstreetcn.com/apiv1/content/articles\",\n        \"method\": \"get\"\n    },\n    \"assertions\": [\n        {\n            \"source\": \"status\",\n            \"operator\": \"equal\",\n            \"expected\": 200\n        },\n        {\n            \"source\": \"body\",\n            \"operator\": \"equal\",\n            \"key\": \"code\",\n            \"expected\": 20000,\n            \"source_encoding\": \"json\"\n        }\n    ],\n    \"variables\": [\n        {\n            \"source\": \"body\",\n            \"key\": \"code\",\n            \"source_encoding\": \"json\"\n        }\n    ]\n}\n"
-        	}
-    	]
-}
+[
+	{
+		"name": "post list",
+		"desc": "post list",
+		"type": "http",
+		"conf": "\n{\n    \"task\": {\n        \"path\": \"https://api-prod.wallstreetcn.com/apiv1/content/articles\",\n        \"method\": \"get\"\n    },\n    \"assertions\": [\n        {\n            \"source\": \"status\",\n            \"operator\": \"equal\",\n            \"expected\": 200\n        },\n        {\n            \"source\": \"body\",\n            \"operator\": \"equal\",\n            \"key\": \"code\",\n            \"expected\": 20000,\n            \"source_encoding\": \"json\"\n        }\n    ],\n    \"variables\": [\n        {\n            \"source\": \"body\",\n            \"key\": \"code\",\n            \"source_encoding\": \"json\"\n        }\n    ]\n}\n"
+	}
+]
 `
 	w, err := NewWatcher(conf)
 	assert.Nil(t, err)

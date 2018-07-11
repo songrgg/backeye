@@ -49,13 +49,13 @@ func NewWatcher(config string) (*Watcher, error) {
 	}
 
 	watcher := &Watcher{}
-	conf := Config{}
+	var conf []PointConfig
 	err := json.Unmarshal([]byte(config), &conf)
 	if err != nil {
 		return nil, err
 	}
 
-	for _, p := range conf.Points {
+	for _, p := range conf {
 		if p.Type == "http" {
 			pointConf := httpConf.Config{}
 			err := json.Unmarshal([]byte(p.Conf), &pointConf)

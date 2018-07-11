@@ -14,7 +14,7 @@ func InitModel(config std.ConfigMySQL) {
 	db = std.CreateDB(config)
 	std.LogInfoLn("start init mysql model")
 
-	db.AutoMigrate(&Project{}, &Task{}, &Watch{}, &WatchResult{}, &Assertion{}, &AssertionResult{}, &Variable{})
+	db.AutoMigrate(&AssertionResult{}, &Watcher{}, &WatcherSnapshot{})
 	std.LogInfoLn("end init mysql model")
 }
 
