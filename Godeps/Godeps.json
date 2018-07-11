@@ -9,11 +9,6 @@
 			"Rev": "a368813c5e648fee92e5f6c30e3944ff9d5e8895"
 		},
 		{
-			"ImportPath": "github.com/Sirupsen/logrus",
-			"Comment": "v1.0.5-2-g90150a8",
-			"Rev": "90150a8ed11b6ce285e77e8af2b0109559ce4777"
-		},
-		{
 			"ImportPath": "github.com/coreos/etcd/auth/authpb",
 			"Comment": "v3.3.0-rc.0-77-g9bd9d2041",
 			"Rev": "9bd9d2041f796da58d4479b58247cbb725386278"
@@ -149,6 +144,11 @@
 			"ImportPath": "github.com/robfig/cron",
 			"Comment": "v1-53-gdf38d32",
 			"Rev": "df38d32658d8788cd446ba74db4bb5375c4b0cb3"
+		},
+		{
+			"ImportPath": "github.com/sirupsen/logrus",
+			"Comment": "v1.0.5-2-g90150a8",
+			"Rev": "90150a8ed11b6ce285e77e8af2b0109559ce4777"
 		},
 		{
 			"ImportPath": "github.com/valyala/fasttemplate",
