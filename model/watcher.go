@@ -13,8 +13,8 @@ type Watcher struct {
 }
 
 type WatcherSnapshot struct {
-	ID       int64  `gorm:"primary_key" json:"id"`
-	Revision int64  `gorm:"primary_key;not_auto_increment" json:"revision"`
+	ID       int64  `json:"id"`
+	Revision int64  `json:"revision"`
 	Name     string `gorm:"type:varchar(64)" json:"name"`
 	Desc     string `gorm:"type:varchar(512)" json:"desc"`
 	Cron     string `gorm:"type:varchar(64)" json:"cron"`

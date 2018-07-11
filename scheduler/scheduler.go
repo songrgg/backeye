@@ -3,8 +3,6 @@ package scheduler
 import (
 	"context"
 
-	"fmt"
-
 	"encoding/json"
 
 	"github.com/robfig/cron"
@@ -25,10 +23,9 @@ func (s *Scheduler) AddWatch(w *model.Watcher) error {
 
 	c := cron.New()
 	err = c.AddFunc(w.Cron, func() {
-		as, _ := wat.Do(context.Background())
-		fmt.Println(as)
+		as, err := wat.Do(context.Background())
 		result, _ := json.Marshal(as)
-		dao.NewAssertionResult(w.ID, true, result)
+		dao.NewAssertionResult(w.ID, err == nil, result)
 	})
 	if err != nil {
 		return err
