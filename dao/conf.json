@@ -1,0 +1,13 @@
+{
+    "name": "Post API",
+    "desc": "post API",
+    "cron": "*/2 * * * *",
+    "watchers": [
+        {
+            "name": "post list",
+            "desc": "post list",
+            "type": "http",
+            "conf": ""
+        }
+    ]
+}
