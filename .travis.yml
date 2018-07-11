@@ -16,7 +16,7 @@ env:
     - COMMIT=${TRAVIS_COMMIT::8}
 
 install:
-  - go get -t -v ./...
+  # - go get -t -v ./...
   - go get github.com/mattn/goveralls
 
 script:
