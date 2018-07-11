@@ -2,6 +2,9 @@
 	"ImportPath": "github.com/songrgg/backeye",
 	"GoVersion": "go1.10",
 	"GodepVersion": "v79",
+	"Packages": [
+		"./..."
+	],
 	"Deps": [
 		{
 			"ImportPath": "github.com/BurntSushi/toml",
@@ -82,6 +85,11 @@
 			"ImportPath": "github.com/coreos/pkg/capnslog",
 			"Comment": "v3-13-g97fdf19",
 			"Rev": "97fdf19511ea361ae1c100dd393cc47f8dcfa1e1"
+		},
+		{
+			"ImportPath": "github.com/davecgh/go-spew/spew",
+			"Comment": "v1.1.0-9-gecdeabc",
+			"Rev": "ecdeabc65495df2dec95d7c4a4c3e021903035e5"
 		},
 		{
 			"ImportPath": "github.com/dgrijalva/jwt-go",
@@ -196,6 +204,11 @@
 			"Rev": "30a891c33c7cde7b02a981314b4228ec99380cca"
 		},
 		{
+			"ImportPath": "github.com/pmezard/go-difflib/difflib",
+			"Comment": "v1.0.0",
+			"Rev": "792786c7400a136282c1664665ae0a8db921c6c2"
+		},
+		{
 			"ImportPath": "github.com/robfig/cron",
 			"Comment": "v1-53-gdf38d32",
 			"Rev": "df38d32658d8788cd446ba74db4bb5375c4b0cb3"
@@ -204,6 +217,11 @@
 			"ImportPath": "github.com/sirupsen/logrus",
 			"Comment": "v1.0.5-2-g90150a8",
 			"Rev": "90150a8ed11b6ce285e77e8af2b0109559ce4777"
+		},
+		{
+			"ImportPath": "github.com/stretchr/testify/assert",
+			"Comment": "v1.1.4-27-g4d4bfba",
+			"Rev": "4d4bfba8f1d1027c4fdbe371823030df51419987"
 		},
 		{
 			"ImportPath": "github.com/valyala/fasttemplate",
