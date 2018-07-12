@@ -2,9 +2,8 @@ package watcher
 
 import (
 	"context"
-	"errors"
-
 	"encoding/json"
+	"errors"
 
 	"github.com/songrgg/backeye/pkg/common"
 	"github.com/songrgg/backeye/pkg/variable"

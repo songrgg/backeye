@@ -35,3 +35,46 @@ func NewAssertionResult(watcherId int64, passed bool, result []byte) error {
 
 	return nil
 }
+
+// GetAssertionResults fetches the specified watchID's assertion results.
+func GetAssertionResults(watchID int64, orderBy string, limit int64) ([]model.AssertionResult, error) {
+	if orderBy == "" {
+		orderBy = "created_at desc"
+	}
+
+	rows, err := model.DB().Model(&model.AssertionResult{}).Where(`watcher_id = ?`, watchID).Order(orderBy).Limit(limit).Rows()
+	defer rows.Close()
+
+	if err != nil {
+		return nil, err
+	}
+	var results []model.AssertionResult
+	for rows.Next() {
+		var result model.AssertionResult
+		model.DB().ScanRows(rows, &result)
+		results = append(results, result)
+	}
+	return results, nil
+}
+
+// GetLatestAssertionResults fetches the latest watchID's assertion results.
+func GetLatestAssertionResults(watchIDs []int64) ([]model.AssertionResult, error) {
+	rows, err := model.DB().Model(&model.AssertionResult{}).Where(`id IN (
+	SELECT MAX(id) result_id FROM assertion_results WHERE watcher_id in (?) GROUP BY watcher_id
+)
+`, watchIDs).Rows()
+
+	defer rows.Close()
+
+	if err != nil {
+		return nil, err
+	}
+
+	var results []model.AssertionResult
+	for rows.Next() {
+		var result model.AssertionResult
+		model.DB().ScanRows(rows, &result)
+		results = append(results, result)
+	}
+	return results, nil
+}

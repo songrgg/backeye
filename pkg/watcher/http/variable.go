@@ -1,9 +1,8 @@
 package http
 
 import (
-	"errors"
-
 	"encoding/json"
+	"errors"
 
 	"github.com/songrgg/backeye/pkg/response"
 )

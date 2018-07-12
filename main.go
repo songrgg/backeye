@@ -8,8 +8,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/songrgg/backeye/dao"
 	"github.com/songrgg/backeye/model"
 	"github.com/songrgg/backeye/scheduler"
@@ -30,7 +28,6 @@ func initSchedule() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(all)
 
 	sched := scheduler.NewScheduler()
 

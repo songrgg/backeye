@@ -2,7 +2,6 @@ package scheduler
 
 import (
 	"context"
-
 	"encoding/json"
 
 	"github.com/robfig/cron"

@@ -41,6 +41,12 @@ func NewWatcher(f *form.Watcher) error {
 
 func GetWatchers() ([]model.Watcher, error) {
 	var watchers []model.Watcher
-	model.DB().Find(&watchers, "disabled = false")
+	model.DB().Find(&watchers, "disabled = false").Order("updated_at desc")
 	return watchers, nil
+}
+
+func GetWatcher(ID int64) (model.Watcher, error) {
+	var watcher model.Watcher
+	model.DB().First(&watcher, "id = ? and disabled = false", ID).Order("updated_at desc")
+	return watcher, nil
 }

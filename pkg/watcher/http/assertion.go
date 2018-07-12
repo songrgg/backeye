@@ -3,11 +3,8 @@ package http
 import (
 	"encoding/json"
 	"errors"
-
 	"fmt"
-
 	"reflect"
-
 	"strconv"
 
 	"github.com/songrgg/backeye/pkg/assertion"

@@ -1,9 +1,8 @@
 package watcher
 
 import (
-	"testing"
-
 	"context"
+	"testing"
 
 	"github.com/songrgg/backeye/pkg/variable"
 	"github.com/songrgg/backeye/pkg/watcher/http"

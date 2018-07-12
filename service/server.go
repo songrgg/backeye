@@ -2,7 +2,7 @@ package server
 
 import (
 	"github.com/labstack/echo"
-	"github.com/songrgg/backeye/service/api/schedule"
+	"github.com/songrgg/backeye/service/api/watcher"
 	"github.com/songrgg/backeye/service/middleware"
 	"github.com/songrgg/backeye/service/swagger"
 	"github.com/songrgg/backeye/std"
@@ -27,6 +27,6 @@ func RunServer() {
 
 func mountAPIModule(e *echo.Echo) {
 	apiv1 := e.Group("/v1")
-	schedule.MountAPI(apiv1)
+	watcher.MountAPI(apiv1)
 	swagger.MountSwaggerAPI(e.Group(""))
 }
