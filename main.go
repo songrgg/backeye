@@ -8,11 +8,9 @@
 package main
 
 import (
-	"time"
-
 	"github.com/songrgg/backeye/dao"
 	"github.com/songrgg/backeye/model"
-	"github.com/songrgg/backeye/schedule"
+	"github.com/songrgg/backeye/scheduler"
 	"github.com/songrgg/backeye/service"
 	"github.com/songrgg/backeye/std"
 )
@@ -20,61 +18,25 @@ import (
 func main() {
 	std.InitLog(std.Config.Log)
 	initSchedule()
-	go watchResults()
 	server.RunServer()
 }
 
 func initSchedule() {
 	model.InitModel(std.Config.MySQL)
 
-	all, err := dao.AllTasks()
+	all, err := dao.GetWatchers()
 	if err != nil {
 		panic(err)
 	}
 
-	schedule.INSTANCE.LoadTasks(all)
-}
+	sched := scheduler.NewScheduler()
 
-func watchResults() {
-	for true {
-		select {
-		case watchResult := <-schedule.INSTANCE.WatchResults:
-			assertionResults := make([]model.AssertionResult, len(watchResult.Assertions))
-
-			resultStatus := "success"
-			for i, as := range watchResult.Assertions {
-				now := time.Now()
-				msg := ""
-				if as.Error != nil {
-					msg = as.Error.Error()
-				}
-
-				status := "failed"
-				if as.Passed == true {
-					status = "success"
-				} else {
-					resultStatus = "failed"
-				}
-				assertionResults[i] = model.AssertionResult{
-					AssertionID:       as.AssertionID,
-					Status:            status,
-					ExecutionDuration: as.ExecutionDuration.Nanoseconds(),
-					Message:           msg,
-					TimeMixin: std.TimeMixin{
-						CreatedAt: now,
-						UpdatedAt: now,
-					},
-				}
-			}
-
-			err := dao.NewWatchResult(&model.WatchResult{
-				TaskID:           watchResult.TaskID,
-				Status:           resultStatus,
-				AssertionResults: assertionResults,
-			})
-			if err != nil {
-				std.LogErrorc("mysql", err, "fail to store watch result")
-			}
+	for _, w := range all {
+		err := sched.AddWatch(&w)
+		if err != nil {
+			panic(err)
 		}
+
+		sched.Start(w.ID)
 	}
 }

@@ -20,13 +20,13 @@ import (
 var Config = &ConfigBackeye{}
 
 func init() {
-	path := "conf/backeye.yaml"
+	p := "conf/backeye.yaml"
 	if os.Getenv("CONFIG_ETCDS") != "" {
-		loadFromEtcd(Config, path)
+		loadFromEtcd(Config, p)
 		return
 	}
 
-	err := configor.Load(Config, path)
+	err := configor.Load(Config, p)
 	if err != nil {
 		panic("fail to load configuration")
 	}

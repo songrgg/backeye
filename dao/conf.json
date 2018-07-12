@@ -1,0 +1,27 @@
+{
+    "task": {
+        "path": "https://api-prod.wallstreetcn.com/apiv1/content/articles",
+        "method": "get"
+    },
+    "assertions": [
+        {
+            "source": "status",
+            "operator": "equal",
+            "value": 200
+        },
+        {
+            "source": "body",
+            "operator": "equal",
+            "key": "code",
+            "value": 20000,
+            "sourceEncoding": "json"
+        }
+    ],
+    "variables": [
+        {
+            "source": "body",
+            "key": "code",
+            "sourceEncoding": "json"
+        }
+    ]
+}
