@@ -19,7 +19,7 @@ install:
 
 script:
   - go test ./... -v -covermode=count -coverprofile=coverage.out
-  - goveralls -service travis-ci
+  - goveralls -coverprofile=coverage.out -service travis-ci
 
 after_success:
   - CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-w' -o server ./main.go
