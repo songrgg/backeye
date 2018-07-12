@@ -18,6 +18,7 @@ install:
   - go get github.com/mattn/goveralls
 
 script:
+  - go test ./... -v -covermode=count -coverprofile=coverage.out
   - goveralls -service travis-ci
 
 after_success:
