@@ -2,7 +2,6 @@ package watcher
 
 import (
 	"encoding/json"
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -24,5 +23,4 @@ func TestConf(t *testing.T) {
 	json.Unmarshal([]byte(watcherConf), &c)
 	assert.NotNil(t, c.Points)
 	assert.Len(t, c.Points, 1)
-	fmt.Println(c)
 }
